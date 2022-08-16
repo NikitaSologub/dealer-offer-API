@@ -1,0 +1,8 @@
+version: "3"
+services:
+  dealer-offer-API:
+    image: dealer-offer-API
+    container_name: dealer-offer-API-instance
+    build: .
+    ports:
+      - 15073:15073
