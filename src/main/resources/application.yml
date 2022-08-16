@@ -1,0 +1,10 @@
+server:
+  port: 15073
+  servlet.context-path: /dealer-offer-API
+
+#logging:
+#  level:
+#    ru:
+#      alfaleasing: ${LOGGING_LEVEL:INFO}
+#      alfaleasing.logging:
+#        http: ${LOGGING_LEVEL:INFO}
