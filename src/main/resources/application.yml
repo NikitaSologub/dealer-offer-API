@@ -2,6 +2,10 @@ server:
   port: 15073
   servlet.context-path: /dealer-offer-API
 
+client:
+  dealer-offer-web-portal:
+    url: 'http://localhost:15072/dealer-offer-web-portal'
+
 #logging:
 #  level:
 #    ru:
