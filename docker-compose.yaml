@@ -1,8 +1,36 @@
 version: "3"
 services:
-  dealer-offer-API:
-    image: dealer-offer-API
-    container_name: dealer-offer-API-instance
-    build: .
+  rabbitmq: # шина будет посылать сюда сообщения
+    image: rabbitmq:management
+    container_name: rabbitmq
+    hostname: myrabbitmq
+    ports:
+      - 5672:5672 #port for rabbitmq server
+      - 15672:15672 #port for rabbitmq view in browser
+    restart: always
+    volumes:
+      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
+
+  dealer-offer-api: # ШЛЮЗ - через него идет вся работа
+    image: dealer-offer-api
+    container_name: dealer-offer-api
+#    hostname: localhost
+#    build: .
     ports:
       - 15073:15073
+    networks:
+      - inner-network
+    depends_on:
+      - rabbitmq
+
+  dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
+    image: dealer-offer-web-portal
+    container_name: dealer-offer-web-portal
+#    hostname: localhost
+    ports:
+      - 15072:15072
+    networks:
+      - inner-network
+networks:
+  inner-network:
+    driver: bridge
