@@ -6,6 +6,15 @@ client:
   dealer-offer-web-portal:
     url: 'http://localhost:15072/dealer-offer-web-portal'
 
+#spring:
+#  cloud:
+#    stream:
+#      bindings:
+#        output:
+#          destination: sample
+#        input:
+#          group: queue
+
 #logging:
 #  level:
 #    ru:

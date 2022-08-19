@@ -2,11 +2,15 @@ package ru.alfaleasing.dealer.offer.web.portal.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.web.portal.client.DealerOfferWebPortalClient;
 import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.web.portal.queue.QueueListener;
+
+import java.time.LocalDateTime;
 
 /**
  * Сервис для работы с документами автомобилей
@@ -17,6 +21,7 @@ import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
 public class CarService {
 
     private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
+    private final QueueListener queueWriter;
 
     /**
      * Метод используется для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин
@@ -25,7 +30,11 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public XmlSortedCarsResponse getSortedCarsFromXml(MultipartFile file) {
-        return dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
+        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
+        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
+        XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
+        publishMessage(response.toString());
+        return response;
     }
 
     /**
@@ -35,7 +44,11 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXlsx(MultipartFile file) {
-        return dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
+        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
+        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
+        ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
+        publishMessage(response.toString());
+        return response;
     }
 
     /**
@@ -45,6 +58,23 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXls(MultipartFile file) {
-        return dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
+        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
+        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
+        ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
+        publishMessage(response.toString());
+        return response;
+    }
+
+    /**
+     * Для отправки сообщений в очередь
+     *
+     * @param message данными о автомобилях в формате которые запишем в очередь
+     */
+    public void publishMessage(String message) {
+        log.debug("Записываем сообщение в очередь: {}", message);
+        System.out.println("Записываем сообщение в очередь:" + message);
+        queueWriter.sendMessages().send(MessageBuilder.withPayload(message)
+            .setHeader("x-time-created", LocalDateTime.now())
+            .build());
     }
 }
