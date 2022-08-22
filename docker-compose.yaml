@@ -1,21 +1,36 @@
 version: "3"
 services:
   rabbitmq: # шина будет посылать сюда сообщения
-    image: rabbitmq:management
-    container_name: rabbitmq
-    hostname: myrabbitmq
+    image: rabbitmq:3.10-management
+#    container_name: rabbitmq
+#    hostname: myrabbitmq
     ports:
       - 5672:5672 #port for rabbitmq server
       - 15672:15672 #port for rabbitmq view in browser
-    restart: always
-    volumes:
-      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
+#    restart: always
+    networks:
+      - inner-network
+    environment:
+      DELIVERY_MODE: 2
+      RABBIT_HOST: localhost
+      RABBIT_PORT: 5672
+      RABBIT_USERNAME: guest
+      RABBIT_PASSWORD: guest
+      RABBIT_VHOST: /
+#      "DELIVERY_MODE": "2"
+#      "RABBIT_HOST": "localhost"
+#      "RABBIT_PORT": "5672"
+#      "RABBIT_USERNAME": "guest"
+#      "RABBIT_PASSWORD": "guest"
+#      "RABBIT_VHOST": "/"
+#    volumes:
+#      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
 
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
     image: dealer-offer-api
-    container_name: dealer-offer-api
+#    container_name: dealer-offer-api
 #    hostname: localhost
-#    build: .
+    build: .
     ports:
       - 15073:15073
     networks:
