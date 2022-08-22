@@ -5,6 +5,36 @@ server:
 client:
   dealer-offer-web-portal:
     url: 'http://localhost:15072/dealer-offer-web-portal'
+#    url: 'http://dealer-offer-web-portal:15072/dealer-offer-web-portal'
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        dealer-car-stock:
+          destination: dealer-car-stock-exchange
+          binder: rabbit
+#          group: individual
+      binders:
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                username: ${RABBIT_USERNAME:guest}
+                password: ${RABBIT_PASSWORD:guest}
+                virtual-host: ${RABBIT_VHOST:/}
+                host: ${RABBIT_HOST:localhost}
+                port: ${RABBIT_PORT:5672}
+#                deliveryMode: ${DELIVERY_MODE:2}
+#                deliveryMode: ${DELIVERY_MODE:2}
+#                host: ${RABBIT_HOST:localhost}
+#                port: ${RABBIT_PORT:5672}
+#                username: ${RABBIT_USERNAME:guest}
+#                password: ${RABBIT_PASSWORD:guest}
+#                virtual-host: ${RABBIT_VHOST:/}
+
+#  docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 
 #spring:
 #  cloud:
