@@ -1,9 +1,11 @@
 package ru.alfaleasing.dealer.offer.web.portal.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 /**
  * Дополнительное оборудование которое устанавливает сам дилер (может влиять на цену авто в сторону увеличения)
@@ -12,14 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Equipment {
     /**
      * Название дополнительного оборудования
      */
-    private String name;
+    String name;
 
     /**
      * Стоимость дополнительного оборудования
      */
-    private String price;
+    String price;
 }

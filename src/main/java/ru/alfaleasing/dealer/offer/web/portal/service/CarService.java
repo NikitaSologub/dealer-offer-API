@@ -1,17 +1,14 @@
 package ru.alfaleasing.dealer.offer.web.portal.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.web.portal.client.DealerOfferWebPortalClient;
 import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.queue.QueueListener;
-
-import java.time.LocalDateTime;
+import ru.alfaleasing.dealer.offer.web.portal.queue.processor.QueueProcessor;
 
 /**
  * Сервис для работы с документами автомобилей
@@ -19,10 +16,11 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CarService {
 
     private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
-    private final QueueListener queueWriter;
+    private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
 
     /**
@@ -31,12 +29,11 @@ public class CarService {
      * @param file файл с данными о автомобилях в формате xml
      * @return Запрос со списками валидных и не валидных автомобилей
      */
-    @SneakyThrows
     public XmlSortedCarsResponse getSortedCarsFromXml(MultipartFile file) {
         System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
         XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
-        publishMessage(response.toString());
+        queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);
         return response;
     }
@@ -51,7 +48,7 @@ public class CarService {
         System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
-        publishMessage(response.toString());
+        queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);
         return response;
     }
@@ -66,21 +63,8 @@ public class CarService {
         System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
-        publishMessage(response.toString());
+        queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);
         return response;
-    }
-
-    /**
-     * Для отправки сообщений в очередь
-     *
-     * @param message данными о автомобилях в формате которые запишем в очередь
-     */
-    public void publishMessage(String message) {
-        log.debug("Записываем сообщение в очередь: {}", message);
-        System.out.println("Записываем сообщение в очередь:" + message);
-        queueWriter.sendMessages().send(MessageBuilder.withPayload(message)
-            .setHeader("x-time-created", LocalDateTime.now())
-            .build());
     }
 }

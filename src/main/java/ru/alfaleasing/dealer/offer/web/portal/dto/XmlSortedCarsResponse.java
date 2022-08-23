@@ -1,9 +1,11 @@
 package ru.alfaleasing.dealer.offer.web.portal.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -14,15 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class XmlSortedCarsResponse {
 
     /**
      * Ответ с невалидными автомобилями полученными их xml файла
      */
-    private List<XmlCar> invalidCars;
+    List<XmlCar> invalidCars;
 
     /**
      * Ответ с валидными автомобилями полученными их xml файла
      */
-    private List<XmlCar> validCars;
+    List<XmlCar> validCars;
 }

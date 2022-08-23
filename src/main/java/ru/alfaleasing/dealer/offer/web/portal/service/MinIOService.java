@@ -22,9 +22,9 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class MinIOService {
 
-    private static final int TEN_MB = 10485760;
     private static final String JSON = ".json";
     private final ObjectMapper objectMapper;
     private final MinioClient minioClient;
@@ -38,9 +38,8 @@ public class MinIOService {
      * @param response объект стоков валидных и не валидных автомобилей который будет записан в minIO в формате JSON
      */
     @SneakyThrows
-    @Transactional
     public void writeFileToMinIO(Object response) {
-        String filename = LocalDateTime.now()  + JSON;
+        String filename = LocalDateTime.now() + JSON;
         try {
             createBucketIfNotExists();
 
@@ -48,7 +47,6 @@ public class MinIOService {
             ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
                 .bucket(bucketName)
                 .object(filename)
-//                .stream(new ByteArrayInputStream(bytes), bytes.length, TEN_MB)
                 .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
                 .contentType(APPLICATION_JSON.getMimeType())
                 .build());

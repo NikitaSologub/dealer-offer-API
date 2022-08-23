@@ -1,10 +1,11 @@
 package ru.alfaleasing.dealer.offer.web.portal.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -14,116 +15,116 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class XmlCar {
     /**
      * Производитель
      */
-    private String brandName;
+    String brandName;
 
     /**
      * Имя модели
      */
-    private String modelName;
+    String modelName;
 
     /**
      * Комплектация
      */
-    private String complectationName;
+    String complectationName;
 
     /**
      * Год выпуска
      */
-    private String manufactureYear;
+    String manufactureYear;
 
     /**
      * Опции
      */
-    private String extras;
+    String extras;
 
     /**
      * Цвет кузова
      */
-    private String color;
+    String color;
 
     /**
      * VIN
      */
-    private String vin;
+    String vin;
 
     /**
      * Конечная стоимость автомобиля
      */
-    private String dealerPrice;
+    String dealerPrice;
 
     /**
      * Наличие / поставка
      */
-    private String availability;
+    String availability;
 
     /**
      * Цвет обшивки салона
      */
-    private String interiorColor;
+    String interiorColor;
 
     /**
      * Изображение / фото
      */
-    private List<String> images;
+    List<String> images;
 
     /**
      * Дата поставки а/м
      */
-    private String deliveryDate;
+    String deliveryDate;
 
     /**
      * Дополнительное оборудование
      */
-    private List<Equipment> extraDealerEquipment;
+    List<Equipment> extraDealerEquipment;
 
     /**
      * РРЦ
      */
-    private String msrp;
+    String msrp;
 
     /**
      * Размер скидки при покупке в лизинг
      */
-    private String discount;
+    String discount;
 
     /**
      * Местоположение авто
      */
-    private String location;
+    String location;
 
     /**
      * Промо (Описание скидки, подарочного предложения)
      */
-    private List<String> promo;
+    List<String> promo;
 
     /**
      * Онлайн бронирование
      */
-    private String onlineReservation;
+    String onlineReservation;
 
     /**
      * Код цвета кузова от производителя
      */
-    private String colorCode;
+    String colorCode;
 
     /**
      * Код цвета обшивки салона
      */
-    private String interiorColorCode;
+    String interiorColorCode;
 
     /**
      * Код модели от производителя
      */
-    private String modelCode;
+    String modelCode;
 
     /**
      * Код комплектации от производителя
      */
-    private String equipmentCode;
+    String equipmentCode;
 }

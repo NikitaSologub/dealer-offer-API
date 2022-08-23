@@ -1,9 +1,11 @@
 package ru.alfaleasing.dealer.offer.web.portal.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -16,119 +18,120 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExcelCar {
     /**
      * Производитель
      */
-    private String brandName;
+    String brandName;
 
     /**
      * Имя модели
      */
-    private String modelName;
+    String modelName;
 
     /**
      * Комплектация (equipmentName ?)
      */
-    private String complectationName;
+    String complectationName;
 
     /**
      * Год выпуска
      */
-    private BigInteger manufactureYear;
+    BigInteger manufactureYear;
 
     /**
      * Опции
      */
-    private String extras;
+    String extras;
 
     /**
      * Цвет кузова
      */
-    private String color;
+    String color;
 
     /**
      * VIN
      */
-    private String vin;
+    String vin;
 
     /**
      * Конечная стоимость автомобиля
      */
-    private BigInteger dealerPrice;
+    BigInteger dealerPrice;
 
     /**
      * Наличие / поставка
      */
-    private String availability;
+    String availability;
 
     /**
      * Цвет обшивки салона
      */
-    private String interiorColor;
+    String interiorColor;
 
     /**
      * Изображение / фото
      */
-    private List<String> images;
+    List<String> images;
 
     /**
      * Дата поставки а/м
      */
-    private LocalDate deliveryDate;
+    LocalDate deliveryDate;
 
     /**
      * Дополнительное оборудование ()
      */
-    private List<Equipment> extraDealerEquipment;
+    List<Equipment> extraDealerEquipment;
 
     /**
      * РРЦ
      */
-    private BigInteger msrp;
+    BigInteger msrp;
 
     /**
      * Размер скидки при покупке в лизинг
      */
-    private BigInteger discount;
+    BigInteger discount;
 
     /**
      * Местоположение авто
      */
-    private String location;
+    String location;
 
     /**
      * Промо
      */
-    private List<String> promo;
+    List<String> promo;
 
     /**
      * Онлайн бронирование
      */
-    private String onlineReservation;
+    String onlineReservation;
 
     /**
      * Коды дополнительных опций
      */
-    private String extraOptions;
+    String extraOptions;
 
     /**
      * Код модели от производителя
      */
-    private String modelCode;
+    String modelCode;
 
     /**
      * Код комплектации от производителя
      */
-    private String equipmentCode;
+    String equipmentCode;
 
     /**
      * Код цвета кузова от производителя
      */
-    private BigInteger colorCode;
+    BigInteger colorCode;
 
     /**
      * Код цвета обшивки салона
      */
-    private String interiorColorCode;
+    String interiorColorCode;
 }
