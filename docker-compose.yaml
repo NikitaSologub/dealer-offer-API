@@ -2,12 +2,9 @@ version: "3"
 services:
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
-#    container_name: rabbitmq
-#    hostname: myrabbitmq
     ports:
-      - 5672:5672 #port for rabbitmq server
-      - 15672:15672 #port for rabbitmq view in browser
-#    restart: always
+      - 5672:5672
+      - 15672:15672
     networks:
       - inner-network
     environment:
@@ -17,19 +14,26 @@ services:
       RABBIT_USERNAME: guest
       RABBIT_PASSWORD: guest
       RABBIT_VHOST: /
-#      "DELIVERY_MODE": "2"
-#      "RABBIT_HOST": "localhost"
-#      "RABBIT_PORT": "5672"
-#      "RABBIT_USERNAME": "guest"
-#      "RABBIT_PASSWORD": "guest"
-#      "RABBIT_VHOST": "/"
-#    volumes:
-#      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq/mnesia
+
+  minio: # шина будет записывать сюда json файлы
+    image: minio/minio:latest
+    command: server --console-address ":9001" /data/
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
+      MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
+    volumes:
+      - minio-storage:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
     image: dealer-offer-api
-#    container_name: dealer-offer-api
-#    hostname: localhost
     build: .
     ports:
       - 15073:15073
@@ -41,7 +45,6 @@ services:
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
     image: dealer-offer-web-portal
     container_name: dealer-offer-web-portal
-#    hostname: localhost
     ports:
       - 15072:15072
     networks:

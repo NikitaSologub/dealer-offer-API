@@ -13,17 +13,17 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
 
-@FeignClient(name = "dealer-offer-web-portal-client", url = "${client.dealer-offer-web-portal.url}",
+@FeignClient(name = "dealer-offer-web-portal-client", url = "${client.dealer-offer-web-portal.url}/v1/dealer",
     configuration = DealerOfferWebPortalClient.Config.class)
 public interface DealerOfferWebPortalClient {
 
-    @PostMapping(value = "/v1/dealer/xml", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/xml", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     XmlSortedCarsResponse getSortedCarsFromXmlFile(@RequestPart(value = "file") MultipartFile file);
 
-    @PostMapping(value = "/v1/dealer/xlsx", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/xlsx", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ExcelSortedCarsResponse getSortedCarsFromXlsxFile(@RequestPart(value = "file") MultipartFile file);
 
-    @PostMapping(value = "/v1/dealer/xls", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/xls", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ExcelSortedCarsResponse getSortedCarsFromXlsFile(@RequestPart(value = "file") MultipartFile file);
 
     class Config {
