@@ -37,7 +37,7 @@ public class CarService {
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
         XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
         publishMessage(response.toString());
-        minIOService.writeRequestToJsonFile(response);
+        minIOService.writeFileToMinIO(response);
         return response;
     }
 
@@ -52,7 +52,7 @@ public class CarService {
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
         publishMessage(response.toString());
-        minIOService.writeRequestToJsonFile(response);
+        minIOService.writeFileToMinIO(response);
         return response;
     }
 
@@ -67,7 +67,7 @@ public class CarService {
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
         publishMessage(response.toString());
-        minIOService.writeRequestToJsonFile(response);
+        minIOService.writeFileToMinIO(response);
         return response;
     }
 

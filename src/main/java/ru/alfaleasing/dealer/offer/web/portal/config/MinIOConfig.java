@@ -1,11 +1,11 @@
 package ru.alfaleasing.dealer.offer.web.portal.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 public class MinIOConfig {
@@ -21,17 +21,13 @@ public class MinIOConfig {
     @Value("${minio.secret-key}")
     private String secretKey;
 
-
-    @PostConstruct
-    void initMinioClient() {
-        minioClient = MinioClient.builder()
-            .endpoint(url)
-            .credentials(accessKey, secretKey)
-            .build();
+    @Bean
+    public MinioClient minioClient() {
+        return minioClient = MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
     }
 
     @Bean
-    public MinioClient minioClient() {
-        return minioClient;
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper().registerModule(new JavaTimeModule());
     }
 }
