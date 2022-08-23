@@ -40,20 +40,17 @@ public class MinIOService {
      */
     @SneakyThrows
     public void writeRequestToJsonFile(XmlSortedCarsResponse response) {
-        LocalDateTime time = LocalDateTime.now();
-        String filename = "somefiles//car" + time.toLocalDate().toString() +
-            "-" + time.toLocalTime().getHour() + "-" + time.toLocalTime().getMinute() +
-            "-" + time.toLocalTime().getSecond() + "-" + time.toLocalTime().getNano() + ".json";
-
-        try {
-            objectMapper.writeValue(new File(filename), response);
-        } catch (IOException e) {
-            System.out.println("**file does not exists");
-            log.debug("**file does not exists");
-        }
-        writeFileToMinIO(filename);
+        String filename = getFilename();
+//        try {
+//            objectMapper.writeValue(new File(filename), response);
+//        } catch (IOException e) {
+//            System.out.println("**file does not exists");
+//            log.debug("**file does not exists");
+//        }
+        writeFileToMinIO(filename, response);
         System.out.println("Должно быть файл записан в MinIO");
     }
+
 
     /**
      * Для создания Json файла и отправки его в MinIO
@@ -62,31 +59,34 @@ public class MinIOService {
      */
     @SneakyThrows
     public void writeRequestToJsonFile(ExcelSortedCarsResponse response) {
-        LocalDateTime time = LocalDateTime.now();
-        String filename = "somefiles//car" + time.toLocalDate().toString() +
-            "-" + time.toLocalTime().getHour() + "-" + time.toLocalTime().getMinute() +
-            "-" + time.toLocalTime().getSecond() + "-" + time.toLocalTime().getNano() + ".json";
-
-        try {
-            objectMapper.writeValue(new File(filename), response);
-        } catch (IOException e) {
-            System.out.println("**file does not exists");
-            log.debug("**file does not exists");
-        }
-        writeFileToMinIO(filename);
+        String filename = getFilename();
+//
+//        try {
+//            objectMapper.writeValue(new File(filename), response);
+//        } catch (IOException e) {
+//            System.out.println("**file does not exists");
+//            log.debug("**file does not exists");
+//        }
+        writeFileToMinIO(filename, response);
         System.out.println("Должно быть файл записан в MinIO");
     }
 
     @SneakyThrows
-    public void writeFileToMinIO(String fileName) {
+    public void writeFileToMinIO(String fileName, Object response) {
         try {
             createBucketIfNotExists();
 
-            UploadObjectArgs args = UploadObjectArgs.builder()
-                .bucket(bucketName)
-                .object(fileName.substring("somefiles".length()))
-                .filename(fileName).build();
-            ObjectWriteResponse objectWriteResponse = minioClient.uploadObject(args);
+//            UploadObjectArgs args = UploadObjectArgs.builder()
+//                .bucket(bucketName)
+//                .object(fileName.substring("somefiles".length()))
+//                .filename(fileName).build();
+//            ObjectWriteResponse objectWriteResponse = minioClient.uploadObject(args);
+            byte[] bytes = objectMapper.writeValueAsBytes(response);
+            ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object("some-obj")
+                    .stream(new ByteArrayInputStream(bytes), bytes.length, 1024)
+                    .build());
 
             System.out.println("objectWriteResponse = " + objectWriteResponse);
             log.debug("objectWriteResponse = {}", objectWriteResponse);
@@ -96,6 +96,12 @@ public class MinIOService {
             System.out.println("Error occurred: " + e);
             log.debug("Error occurred: " + e);
         }
+    }
+    private String getFilename() {
+        LocalDateTime time = LocalDateTime.now();
+        return "somefiles//car" + time.toLocalDate().toString() +
+            "-" + time.toLocalTime().getHour() + "-" + time.toLocalTime().getMinute() +
+            "-" + time.toLocalTime().getSecond() + "-" + time.toLocalTime().getNano() + ".json";
     }
 
     @SneakyThrows
