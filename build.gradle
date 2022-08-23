@@ -26,16 +26,16 @@ ext {
 }
 
 dependencies {
-	compile group: 'org.springframework.cloud', name: 'spring-cloud-stream-binder-rabbit'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-stream-binder-rabbit'
+//	implementation 'org.springframework.cloud:spring-cloud-stream'
+//	implementation("io.minio:minio:8.4.3")
+	implementation("io.minio:minio:7.1.2")
 //	compile 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.0'
 //	implementation 'io.github.openfeign.form:feign-form:3.8.0'
 //	implementation 'io.github.openfeign.form:feign-form-spring:3.8.0'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-	compile 'org.springframework.boot:spring-boot-starter-actuator'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-//	compile 'io.springfox:springfox-swagger2:2.9.2'
-//	compile 'io.springfox:springfox-swagger-ui:2.9.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
@@ -43,7 +43,6 @@ dependencies {
 	implementation 'io.github.openfeign:feign-micrometer:11.6'
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
 }
-
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"

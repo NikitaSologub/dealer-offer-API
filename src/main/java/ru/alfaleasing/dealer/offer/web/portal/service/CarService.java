@@ -1,6 +1,7 @@
 package ru.alfaleasing.dealer.offer.web.portal.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class CarService {
 
     private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
     private final QueueListener queueWriter;
+    private final MinIOService minIOService;
 
     /**
      * Метод используется для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин
@@ -29,11 +31,13 @@ public class CarService {
      * @param file файл с данными о автомобилях в формате xml
      * @return Запрос со списками валидных и не валидных автомобилей
      */
+    @SneakyThrows
     public XmlSortedCarsResponse getSortedCarsFromXml(MultipartFile file) {
         System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
         XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
         publishMessage(response.toString());
+        minIOService.writeRequestToJsonFile(response);
         return response;
     }
 
@@ -48,6 +52,7 @@ public class CarService {
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
         publishMessage(response.toString());
+        minIOService.writeRequestToJsonFile(response);
         return response;
     }
 
@@ -62,6 +67,7 @@ public class CarService {
         log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
         publishMessage(response.toString());
+        minIOService.writeRequestToJsonFile(response);
         return response;
     }
 
