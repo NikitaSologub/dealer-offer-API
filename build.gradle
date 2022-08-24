@@ -23,22 +23,23 @@ repositories {
 
 ext {
     set('springCloudVersion', "2020.0.5")
-    set('minIOVersion',"7.1.2")
-    set('openFeignMicrometrVersion',"11.6")
+    set('minIOVersion', "7.1.2")
+    set('openFeignMicrometrVersion', "11.6")
+    set('lombokVersion', "1.18.24")
 }
 
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit"
     implementation "io.minio:minio:${minIOVersion}"
     implementation "io.github.openfeign:feign-micrometer:${openFeignMicrometrVersion}"
-//	implementation 'ru.alfaleasing:logging:release-2.2.1'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+//	implementation "ru.alfaleasing:logging:release-2.2.1"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 dependencyManagement {
     imports {
