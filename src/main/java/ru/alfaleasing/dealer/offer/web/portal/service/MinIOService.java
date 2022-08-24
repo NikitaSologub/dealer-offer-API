@@ -39,10 +39,9 @@ public class MinIOService {
      */
     @SneakyThrows
     public void writeFileToMinIO(Object response) {
-        String filename = LocalDateTime.now() + JSON;
+        String filename = LocalDateTime.now() + JSON; //todo
         try {
             createBucketIfNotExists();
-
             byte[] bytes = objectMapper.writeValueAsBytes(response);
             ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
                 .bucket(bucketName)
@@ -59,7 +58,6 @@ public class MinIOService {
             System.out.println("Error occurred: " + e);
             log.debug("Error occurred: " + e);
         }
-        System.out.println("Должно быть файл записан в MinIO");
     }
 
     /**

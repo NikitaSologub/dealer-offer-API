@@ -19,6 +19,10 @@ spring:
         dealer-car-stock:
           destination: dealer-car-stock-exchange
           binder: rabbit
+
+
+
+
       binders:
         rabbit:
           type: rabbit
