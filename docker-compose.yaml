@@ -2,13 +2,16 @@ version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
     image: dealer-offer-api
-    build: .
+    container_name: dealer-offer-api
+#    build: .
     ports:
       - "15073:15073"
     networks:
       - inner-network
     depends_on:
       - rabbitmq
+    environment:
+      DEALER-OFFER-WEB-PORTAL-URL: "https://dealer-offer-web-portal:15072"
 
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
     image: dealer-offer-web-portal
@@ -17,6 +20,16 @@ services:
       - "15072:15072"
     networks:
       - inner-network
+
+  avtomir-dealer-provider: # микросервис для похода на Автомир
+    image: avtomir-dealer-provider
+    container_name: avtomir-dealer-provider
+    ports:
+      - "18420:18420"
+    networks:
+      - inner-network
+    environment:
+      DEALER-OFFER-API-URL: "https://dealer-offer-api:15073"
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
@@ -42,13 +55,16 @@ services:
     environment:
       MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
       MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
-    volumes:
-      - minio-storage:/data
+    networks:
+      - inner-network
+#    volumes:
+#      - minio-storage:/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
+
 networks:
   inner-network:
     driver: bridge
