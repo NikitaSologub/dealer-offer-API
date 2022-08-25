@@ -2,6 +2,7 @@ package ru.alfaleasing.dealer.offer.web.portal.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,9 @@ import ru.alfaleasing.dealer.offer.web.portal.queue.processor.QueueProcessor;
 @Transactional
 public class CarService {
 
+    @Value("${client.dealer-offer-web-portal.url}")
+    String url;
+
     private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
@@ -30,8 +34,8 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public XmlSortedCarsResponse getSortedCarsFromXml(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
-        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xml");
+        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xml");
+        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xml", url);
         XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
         queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);
@@ -45,8 +49,8 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXlsx(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
-        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xlsx");
+        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xlsx");
+        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xlsx", url);
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
         queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);
@@ -60,8 +64,8 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXls(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
-        log.debug("Попали в сервис и пытаемся сходить на url: http://localhost:15072/dealer-offer-web-portal/v1/dealer/xls");
+        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xls");
+        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xls", url);
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
         queueProcessor.publishMessage(response.toString());
         minIOService.writeFileToMinIO(response);

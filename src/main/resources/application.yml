@@ -4,7 +4,7 @@ server:
 
 client:
   dealer-offer-web-portal:
-    url: 'http://localhost:15072/dealer-offer-web-portal'
+    url: ${DEALER-OFFER-WEB-PORTAL-URL:http://localhost:15072/dealer-offer-web-portal}
 
 minio:
   url: http://localhost:9000/ # Minio Host (by default - https://play.min.io)
