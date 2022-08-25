@@ -22,7 +22,7 @@ public class DealerOfferController {
     public void getOffersByApi(@RequestBody Object offer){
         log.debug(LocalDateTime.now() + " request from avtomir");
         System.out.println(LocalDateTime.now() + " request from avtomir");
-        minIOService.writeFileToMinIO(offer);
+//        minIOService.writeFileToMinIO(offer);
     }
 
 }
