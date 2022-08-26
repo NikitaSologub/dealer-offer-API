@@ -9,7 +9,11 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      DEALER-OFFER-WEB-PORTAL-URL: "http://dealer-offer-web-portal:15072"
+      DEALER_OFFER_WEB_PORTAL_URL: "http://dealer-offer-web-portal:15072"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_PORT: "5672"
+      RABBIT_USERNAME: "guest"
+      RABBIT_PASSWORD: "guest"
     networks:
       - inner-network
 
@@ -27,12 +31,14 @@ services:
     ports:
       - "18420:18420"
     environment:
-      DEALER-OFFER-API-URL: "http://dealer-offer-api:15073"
+      DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
     networks:
       - inner-network
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
+    container_name: rabbitmq
+    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"

@@ -25,8 +25,8 @@ public class QueueProcessor {
     public void publishMessage(String message) {
         log.debug("Записываем сообщение в очередь: {}", message);
         System.out.println("Записываем сообщение в очередь:" + message);
-//        queueSender.sendCarStock().send(MessageBuilder.withPayload(message)//todo
-//            .setHeader("x-time-created", LocalDateTime.now())
-//            .build());
+        queueSender.sendCarStock().send(MessageBuilder.withPayload(message)
+            .setHeader("x-time-created", LocalDateTime.now())
+            .build());
     }
 }
