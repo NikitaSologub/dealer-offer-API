@@ -26,7 +26,7 @@ spring:
             username: ${RABBIT_USERNAME:guest}
             password: ${RABBIT_PASSWORD:guest}
             virtual-host: ${RABBIT_VHOST:/}
-            host: ${RABBIT_HOST:localhost}
+            host: ${RABBIT_HOST:rabbitmq}
             port: ${RABBIT_PORT:5672}
 
 #logging:

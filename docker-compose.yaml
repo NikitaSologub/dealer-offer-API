@@ -10,8 +10,6 @@ services:
       - rabbitmq
     environment:
       DEALER-OFFER-WEB-PORTAL-URL: "http://dealer-offer-web-portal:15072"
-      RABBIT_HOST: rabbitmq # localhost
-      RABBIT_VHOST: / # /rabbitmq
     networks:
       - inner-network
 
@@ -35,14 +33,10 @@ services:
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
-    container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBIT_HOST: rabbitmq # localhost
-      RABBIT_VHOST: / # /rabbitmq
-      DELIVERY_MODE: 2
       RABBIT_PORT: 5672
       RABBIT_USERNAME: guest
       RABBIT_PASSWORD: guest
@@ -66,8 +60,6 @@ services:
 #      - inner-network
 #    volumes:
 #      - minio-storage:/data
-#      - minio-storage:/data1
-#      - minio-storage:/data2
 #    healthcheck:
 #      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
 #      interval: 30s
