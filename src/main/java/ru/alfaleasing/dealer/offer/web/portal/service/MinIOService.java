@@ -27,7 +27,7 @@ public class MinIOService {
 
     private static final String JSON = ".json";
     private final ObjectMapper objectMapper;
-    private final MinioClient minioClient;
+//    private final MinioClient minioClient;
 
     @Value("${minio.bucket}")
     private String bucketName;
@@ -40,34 +40,36 @@ public class MinIOService {
     @SneakyThrows
     public void writeFileToMinIO(Object response) {
         String filename = LocalDateTime.now() + JSON; //todo
-        try {
-            createBucketIfNotExists();
-            byte[] bytes = objectMapper.writeValueAsBytes(response);
-            ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
-                .bucket(bucketName)
-                .object(filename)
-                .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
-                .contentType(APPLICATION_JSON.getMimeType())
-                .build());
+        System.out.println("Типо положили в minIO (понарошку)");
+        log.debug("Типо положили в minIO (понарошку)");
+//        try {
+//            createBucketIfNotExists();
+//            byte[] bytes = objectMapper.writeValueAsBytes(response);
+//            ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+//                .bucket(bucketName)
+//                .object(filename)
+//                .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
+//                .contentType(APPLICATION_JSON.getMimeType())
+//                .build());
 
-            System.out.println("objectWriteResponse = " + objectWriteResponse);
-            log.debug("objectWriteResponse = {}", objectWriteResponse);
-            System.out.println(filename + " successfully uploaded to: container: " + bucketName + "   blob: " + filename);
-            log.debug("{} successfully uploaded to: container: {}   blob: {}", filename, bucketName, filename);
-        } catch (MinioException e) {
-            System.out.println("Error occurred: " + e);
-            log.debug("Error occurred: " + e);
-        }
+//            System.out.println("objectWriteResponse = " + objectWriteResponse);
+//            log.debug("objectWriteResponse = {}", objectWriteResponse);
+//            System.out.println(filename + " successfully uploaded to: container: " + bucketName + "   blob: " + filename);
+//            log.debug("{} successfully uploaded to: container: {}   blob: {}", filename, bucketName, filename);
+//        } catch (MinioException e) {
+//            System.out.println("Error occurred: " + e);
+//            log.debug("Error occurred: " + e);
+//        }
     }
 
-    /**
-     * Метод создаёт bucket в пространстве minIO если его не существует
-     */
-    @SneakyThrows
-    private void createBucketIfNotExists() {
-        boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
-        if (!bucketExists) {
-            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-        }
-    }
+//    /**
+//     * Метод создаёт bucket в пространстве minIO если его не существует
+//     */
+//    @SneakyThrows
+//    private void createBucketIfNotExists() {
+//        boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+//        if (!bucketExists) {
+//            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+//        }
+//    }
 }

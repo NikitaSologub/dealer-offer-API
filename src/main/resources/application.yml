@@ -4,10 +4,10 @@ server:
 
 client:
   dealer-offer-web-portal:
-    url: ${DEALER-OFFER-WEB-PORTAL-URL:http://localhost:15072/dealer-offer-web-portal}
+    url: ${DEALER-OFFER-WEB-PORTAL-URL:http://localhost:15072}/dealer-offer-web-portal/v1/dealer
 
 minio:
-  url: ${MINIO_ROOT_URL:http://minio:9000/} # Minio Host (by default - https://play.min.io)
+  url: ${MINIO_ROOT_URL:https://localhost:9000/} # Minio Host (by default - https://play.min.io)
   bucket: ${MINIO_BUCKET:retrobucket} # Minio Bucket name for your application (for example 00000qweqwe)
   access-key: ${MINIO_ROOT_USER:Q3AM3UQ867SPQQA43P2F} # Minio access key (login)
   secret-key: ${MINIO_ROOT_PASSWORD:zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG} # Minio secret key (password)
