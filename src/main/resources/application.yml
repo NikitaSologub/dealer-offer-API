@@ -4,7 +4,7 @@ server:
 
 client:
   dealer-offer-web-portal:
-    url: ${DEALER-OFFER-WEB-PORTAL-URL:http://localhost:15072}/dealer-offer-web-portal/v1/dealer
+    url: ${DEALER_OFFER_WEB_PORTAL_URL:http://localhost:15072}/dealer-offer-web-portal/v1/dealer
 
 minio:
   url: ${MINIO_ROOT_URL:https://localhost:9000/} # Minio Host (by default - https://play.min.io)
@@ -23,11 +23,12 @@ spring:
         rabbit:
           type: rabbit
           environment:
+            virtual-host: ${RABBIT_VHOST:/}
+            port: ${RABBIT_PORT:5672}
             username: ${RABBIT_USERNAME:guest}
             password: ${RABBIT_PASSWORD:guest}
-            virtual-host: ${RABBIT_VHOST:/}
-            host: ${RABBIT_HOST:rabbitmq}
-            port: ${RABBIT_PORT:5672}
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
 
 #logging:
 #  level:
