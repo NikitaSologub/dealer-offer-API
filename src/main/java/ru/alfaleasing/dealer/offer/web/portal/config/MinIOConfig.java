@@ -21,10 +21,10 @@ public class MinIOConfig {
     @Value("${minio.secret-key}")
     private String secretKey;
 
-    @Bean
-    public MinioClient minioClient() {
-        return minioClient = MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
-    }
+//    @Bean
+//    public MinioClient minioClient() {
+//        return minioClient = MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
+//    }
 
     @Bean
     public ObjectMapper objectMapper() {

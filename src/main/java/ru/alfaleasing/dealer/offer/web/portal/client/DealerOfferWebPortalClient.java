@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
 
-@FeignClient(name = "dealer-offer-web-portal-client", url = "${client.dealer-offer-web-portal.url}/v1/dealer",
+@FeignClient(name = "dealer-offer-web-portal-client", url = "${client.dealer-offer-web-portal.url}",
     configuration = DealerOfferWebPortalClient.Config.class)
 public interface DealerOfferWebPortalClient {
 
