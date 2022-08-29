@@ -22,10 +22,10 @@ public class XmlSortedCarsResponse {
     /**
      * Ответ с невалидными автомобилями полученными их xml файла
      */
-    List<XmlCar> invalidCars;
+    List<XmlCarDTO> invalidCars;
 
     /**
      * Ответ с валидными автомобилями полученными их xml файла
      */
-    List<XmlCar> validCars;
+    List<XmlCarDTO> validCars;
 }

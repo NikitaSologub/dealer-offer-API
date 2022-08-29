@@ -3,19 +3,23 @@ services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
     image: dealer-offer-api
     container_name: dealer-offer-api
-    build: .
     ports:
       - "15073:15073"
     depends_on:
       - rabbitmq
+      - minio
     environment:
       DEALER_OFFER_WEB_PORTAL_URL: "http://dealer-offer-web-portal:15072"
       RABBIT_HOST: "rabbitmq"
       RABBIT_PORT: "5672"
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
+      MINIO_ROOT_URL: http://minio:9000/
+      MINIO_BUCKET: retrobucket
+      MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
+      MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
     networks:
-      - inner-network
+      - application-network
 
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
     image: dealer-offer-web-portal
@@ -23,7 +27,7 @@ services:
     ports:
       - "15072:15072"
     networks:
-      - inner-network
+      - application-network
 
   avtomir-dealer-provider: # микросервис для похода на Автомир
     image: avtomir-dealer-provider
@@ -33,7 +37,7 @@ services:
     environment:
       DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
     networks:
-      - inner-network
+      - application-network
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
@@ -47,31 +51,25 @@ services:
       RABBIT_USERNAME: guest
       RABBIT_PASSWORD: guest
     networks:
-      - inner-network
+      - application-network
 
-#  minio: # шина будет записывать сюда json файлы
-#    image: minio/minio:latest
-#    hostname: minio
-#    #    container_name: minio
-#    command: server --console-address ":9001" /data/
-#    ports:
-#      - "9000:9000"
-#      - "9001:9001"
-#    environment:
-#      MINIO_ROOT_URL: http://localhost:9000/
-#      MINIO_BUCKET: retrobucket
-#      MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
-#      MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
-#    networks:
-#      - inner-network
-#    volumes:
-#      - minio-storage:/data
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-#      interval: 30s
-#      timeout: 20s
-#      retries: 3
+  minio: # шина будет записывать сюда json файлы
+    image: minio/minio:latest
+    container_name: minio
+    hostname: minio
+    command: server --console-address ":9001" /data/
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_BUCKET: retrobucket
+      MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
+      MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
+    networks:
+      - application-network
+    volumes:
+      - /data/minio/data:/export
 
 networks:
-  inner-network:
+  application-network:
     driver: bridge
