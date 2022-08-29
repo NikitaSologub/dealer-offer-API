@@ -1,5 +1,6 @@
 package ru.alfaleasing.dealer.offer.web.portal.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExcelInvalidCar {
+public class ExcelInvalidCarDTO {
     /**
      * Производитель
      */
@@ -81,7 +82,8 @@ public class ExcelInvalidCar {
     /**
      * Дополнительное оборудование ()
      */
-    List<Equipment> extraDealerEquipment;
+    @JsonProperty("extraDealerEquipment")
+    List<EquipmentDTO> extraDealerEquipmentDTO;
 
     /**
      * РРЦ

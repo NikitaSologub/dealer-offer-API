@@ -20,13 +20,12 @@ public class QueueProcessor {
     /**
      * Для отправки сообщений в очередь
      *
-     * @param message данными о автомобилях в формате которые запишем в очередь
+     * @param data данными о автомобилях в формате которые запишем в очередь
      */
-    public void publishMessage(String message) {
-        log.debug("Записываем сообщение в очередь: {}", message);
-        System.out.println("Записываем сообщение в очередь:" + message);
-        queueSender.sendCarStock().send(MessageBuilder.withPayload(message)
-            .setHeader("x-time-created", LocalDateTime.now())
+    public void publishMessage(Object data) {
+        log.debug("Записываем сообщение в очередь: {}", data);
+        queueSender.sendCarStock().send(MessageBuilder.withPayload(data)
+//            .setHeader("x-time-created", LocalDateTime.now())
             .build());
     }
 }

@@ -21,10 +21,10 @@ public class ExcelSortedCarsResponse {
     /**
      * Список Dto c невалидной информацией о автомобилях
      */
-    List<ExcelInvalidCar> invalidCars;
+    List<ExcelInvalidCarDTO> invalidCars;
 
     /**
      * Список Dto c валидной информацией о автомобилях
      */
-    List<ExcelCar> validCars;
+    List<ExcelCarDTO> validCars;
 }

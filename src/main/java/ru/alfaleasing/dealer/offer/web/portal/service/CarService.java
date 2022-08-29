@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.web.portal.client.DealerOfferWebPortalClient;
+import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelCarDTO;
 import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.web.portal.dto.XmlCarDTO;
 import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.web.portal.queue.processor.QueueProcessor;
+
+import java.util.List;
 
 /**
  * Сервис для работы с документами автомобилей
@@ -20,12 +24,12 @@ import ru.alfaleasing.dealer.offer.web.portal.queue.processor.QueueProcessor;
 @Transactional
 public class CarService {
 
-    @Value("${client.dealer-offer-web-portal.url}")
-    String url;
-
     private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
+
+    @Value("${client.dealer-offer-web-portal.url}")
+    private String url;
 
     /**
      * Метод используется для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин
@@ -34,11 +38,12 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public XmlSortedCarsResponse getSortedCarsFromXml(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xml");
-        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xml", url);
+        log.info("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xml", url);
         XmlSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXmlFile(file);
-        queueProcessor.publishMessage(response.toString());
-        minIOService.writeFileToMinIO(response);
+        log.info("Автомобили которые оказались не валидными прийдя от клиента {}", response.getInvalidCars());
+        List<XmlCarDTO> validCars = response.getValidCars();
+        queueProcessor.publishMessage(validCars);
+        minIOService.writeFileToMinIO(validCars);
         return response;
     }
 
@@ -49,11 +54,12 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXlsx(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xlsx");
-        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xlsx", url);
+        log.info("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xlsx", url);
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
-        queueProcessor.publishMessage(response.toString());
-        minIOService.writeFileToMinIO(response);
+        log.info("Автомобили которые оказались не валидными прийдя от клиента {}", response.getInvalidCars());
+        List<ExcelCarDTO> validCars = response.getValidCars();
+        queueProcessor.publishMessage(validCars);
+        minIOService.writeFileToMinIO(validCars);
         return response;
     }
 
@@ -64,11 +70,12 @@ public class CarService {
      * @return Запрос со списками валидных и не валидных автомобилей
      */
     public ExcelSortedCarsResponse getSortedCarsFromXls(MultipartFile file) {
-        System.out.println("Попали в сервис и пытаемся сходить на url: " + url + "/v1/dealer/xls");
-        log.debug("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xls", url);
+        log.info("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xls", url);
         ExcelSortedCarsResponse response = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
-        queueProcessor.publishMessage(response.toString());
-        minIOService.writeFileToMinIO(response);
+        log.info("Автомобили которые оказались не валидными прийдя от клиента {}", response.getInvalidCars());
+        List<ExcelCarDTO> validCars = response.getValidCars();
+        queueProcessor.publishMessage(validCars);
+        minIOService.writeFileToMinIO(validCars);
         return response;
     }
 }
