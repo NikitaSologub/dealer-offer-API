@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.config;
+package ru.alfaleasing.dealer.offer.api.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.dto;
+package ru.alfaleasing.dealer.offer.api.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

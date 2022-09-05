@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.client;
+package ru.alfaleasing.dealer.offer.api.client;
 
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.dto.ExcelSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.dto.XmlSortedCarsResponse;
 
 @FeignClient(name = "dealer-offer-web-portal-client", url = "${client.dealer-offer-web-portal.url}",
     configuration = DealerOfferWebPortalClient.Config.class)

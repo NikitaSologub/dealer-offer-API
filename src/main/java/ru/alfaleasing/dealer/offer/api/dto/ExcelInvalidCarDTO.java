@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.dto;
+package ru.alfaleasing.dealer.offer.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -11,14 +11,14 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 /**
- * Представление данных автомобиля из xml документа
+ * Dto с невалидными данными о автомобиле (все поля - типа String)
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class XmlCarDTO {
+public class ExcelInvalidCarDTO {
     /**
      * Производитель
      */
@@ -30,7 +30,7 @@ public class XmlCarDTO {
     String modelName;
 
     /**
-     * Комплектация
+     * Комплектация (equipmentName ?)
      */
     String complectationName;
 
@@ -80,7 +80,7 @@ public class XmlCarDTO {
     String deliveryDate;
 
     /**
-     * Дополнительное оборудование
+     * Дополнительное оборудование ()
      */
     @JsonProperty("extraDealerEquipment")
     List<EquipmentDTO> extraDealerEquipmentDTO;
@@ -101,24 +101,19 @@ public class XmlCarDTO {
     String location;
 
     /**
-     * Промо (Описание скидки, подарочного предложения)
+     * Промо
      */
     List<String> promo;
 
     /**
-     * Онлайн бронирование
+     * Онлайн бронирования
      */
     String onlineReservation;
 
     /**
-     * Код цвета кузова от производителя
+     * Коды дополнительных опций
      */
-    String colorCode;
-
-    /**
-     * Код цвета обшивки салона
-     */
-    String interiorColorCode;
+    String extraOptions;
 
     /**
      * Код модели от производителя
@@ -129,4 +124,14 @@ public class XmlCarDTO {
      * Код комплектации от производителя
      */
     String equipmentCode;
+
+    /**
+     * Код цвета кузова от производителя
+     */
+    String colorCode;
+
+    /**
+     * Код цвета обшивки салона
+     */
+    String interiorColorCode;
 }

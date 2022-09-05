@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.controller;
+package ru.alfaleasing.dealer.offer.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.service.CarService;
+import ru.alfaleasing.dealer.offer.api.dto.ExcelSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.dto.XmlSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.service.CarService;
 
 /**
  * Контроллер для получения списков валидных и невалидных автомобилей из приходящих файлов

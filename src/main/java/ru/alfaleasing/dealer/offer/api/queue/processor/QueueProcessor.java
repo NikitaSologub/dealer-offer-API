@@ -1,13 +1,11 @@
-package ru.alfaleasing.dealer.offer.web.portal.queue.processor;
+package ru.alfaleasing.dealer.offer.api.queue.processor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alfaleasing.dealer.offer.web.portal.queue.QueueSender;
-
-import java.time.LocalDateTime;
+import ru.alfaleasing.dealer.offer.api.queue.QueueSender;
 
 @Service
 @RequiredArgsConstructor

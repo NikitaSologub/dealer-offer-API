@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.service;
+package ru.alfaleasing.dealer.offer.api.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.alfaleasing.dealer.offer.web.portal.client.DealerOfferWebPortalClient;
-import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelCarDTO;
-import ru.alfaleasing.dealer.offer.web.portal.dto.ExcelSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.dto.XmlCarDTO;
-import ru.alfaleasing.dealer.offer.web.portal.dto.XmlSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.web.portal.queue.processor.QueueProcessor;
+import ru.alfaleasing.dealer.offer.api.dto.ExcelSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.client.DealerOfferWebPortalClient;
+import ru.alfaleasing.dealer.offer.api.dto.ExcelCarDTO;
+import ru.alfaleasing.dealer.offer.api.dto.XmlCarDTO;
+import ru.alfaleasing.dealer.offer.api.dto.XmlSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.queue.processor.QueueProcessor;
 
 import java.util.List;
 

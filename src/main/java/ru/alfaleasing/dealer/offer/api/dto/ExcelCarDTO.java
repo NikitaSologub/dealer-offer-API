@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.dto;
+package ru.alfaleasing.dealer.offer.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -8,17 +8,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Dto с невалидными данными о автомобиле (все поля - типа String)
+ * Dto c валидной информацией о автомобиле
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExcelInvalidCarDTO {
+public class ExcelCarDTO {
     /**
      * Производитель
      */
@@ -37,7 +39,7 @@ public class ExcelInvalidCarDTO {
     /**
      * Год выпуска
      */
-    String manufactureYear;
+    BigInteger manufactureYear;
 
     /**
      * Опции
@@ -57,7 +59,7 @@ public class ExcelInvalidCarDTO {
     /**
      * Конечная стоимость автомобиля
      */
-    String dealerPrice;
+    BigInteger dealerPrice;
 
     /**
      * Наличие / поставка
@@ -77,7 +79,7 @@ public class ExcelInvalidCarDTO {
     /**
      * Дата поставки а/м
      */
-    String deliveryDate;
+    LocalDate deliveryDate;
 
     /**
      * Дополнительное оборудование ()
@@ -88,12 +90,12 @@ public class ExcelInvalidCarDTO {
     /**
      * РРЦ
      */
-    String msrp;
+    BigInteger msrp;
 
     /**
      * Размер скидки при покупке в лизинг
      */
-    String discount;
+    BigInteger discount;
 
     /**
      * Местоположение авто
@@ -106,7 +108,7 @@ public class ExcelInvalidCarDTO {
     List<String> promo;
 
     /**
-     * Онлайн бронирования
+     * Онлайн бронирование
      */
     String onlineReservation;
 
@@ -128,7 +130,7 @@ public class ExcelInvalidCarDTO {
     /**
      * Код цвета кузова от производителя
      */
-    String colorCode;
+    BigInteger colorCode;
 
     /**
      * Код цвета обшивки салона

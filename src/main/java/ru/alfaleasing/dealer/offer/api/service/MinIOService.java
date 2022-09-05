@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.service;
+package ru.alfaleasing.dealer.offer.api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.minio.BucketExistsArgs;
