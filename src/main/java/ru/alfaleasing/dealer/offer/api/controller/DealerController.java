@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.controller;
+package ru.alfaleasing.dealer.offer.api.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alfaleasing.dealer.offer.web.portal.dto.Dealer;
+import ru.alfaleasing.dealer.offer.api.dto.Dealer;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

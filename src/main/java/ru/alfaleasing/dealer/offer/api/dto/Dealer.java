@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.dto;
+package ru.alfaleasing.dealer.offer.api.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,11 +23,11 @@ public class Dealer {
     @ApiModelProperty(value = "Уникальный идентификатор дилера", required = true)
     String uid;
 
-    @ApiModelProperty(value = "Регион")
-    String region;
-
-    @ApiModelProperty(value = "Город")
-    String city;
+//    @ApiModelProperty(value = "Регион")
+//    String region;
+//
+//    @ApiModelProperty(value = "Город")
+//    String city;
 
     @ApiModelProperty(value = "Адрес", required = true)
     String address;

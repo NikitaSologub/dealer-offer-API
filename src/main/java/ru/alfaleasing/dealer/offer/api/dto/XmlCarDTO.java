@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.dto;
+package ru.alfaleasing.dealer.offer.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -8,19 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Dto c валидной информацией о автомобиле
+ * Представление данных автомобиля из xml документа
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExcelCarDTO {
+public class XmlCarDTO {
     /**
      * Производитель
      */
@@ -32,14 +30,14 @@ public class ExcelCarDTO {
     String modelName;
 
     /**
-     * Комплектация (equipmentName ?)
+     * Комплектация
      */
     String complectationName;
 
     /**
      * Год выпуска
      */
-    BigInteger manufactureYear;
+    String manufactureYear;
 
     /**
      * Опции
@@ -59,7 +57,7 @@ public class ExcelCarDTO {
     /**
      * Конечная стоимость автомобиля
      */
-    BigInteger dealerPrice;
+    String dealerPrice;
 
     /**
      * Наличие / поставка
@@ -79,10 +77,10 @@ public class ExcelCarDTO {
     /**
      * Дата поставки а/м
      */
-    LocalDate deliveryDate;
+    String deliveryDate;
 
     /**
-     * Дополнительное оборудование ()
+     * Дополнительное оборудование
      */
     @JsonProperty("extraDealerEquipment")
     List<EquipmentDTO> extraDealerEquipmentDTO;
@@ -90,12 +88,12 @@ public class ExcelCarDTO {
     /**
      * РРЦ
      */
-    BigInteger msrp;
+    String msrp;
 
     /**
      * Размер скидки при покупке в лизинг
      */
-    BigInteger discount;
+    String discount;
 
     /**
      * Местоположение авто
@@ -103,7 +101,7 @@ public class ExcelCarDTO {
     String location;
 
     /**
-     * Промо
+     * Промо (Описание скидки, подарочного предложения)
      */
     List<String> promo;
 
@@ -113,9 +111,14 @@ public class ExcelCarDTO {
     String onlineReservation;
 
     /**
-     * Коды дополнительных опций
+     * Код цвета кузова от производителя
      */
-    String extraOptions;
+    String colorCode;
+
+    /**
+     * Код цвета обшивки салона
+     */
+    String interiorColorCode;
 
     /**
      * Код модели от производителя
@@ -126,14 +129,4 @@ public class ExcelCarDTO {
      * Код комплектации от производителя
      */
     String equipmentCode;
-
-    /**
-     * Код цвета кузова от производителя
-     */
-    BigInteger colorCode;
-
-    /**
-     * Код цвета обшивки салона
-     */
-    String interiorColorCode;
 }

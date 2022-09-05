@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.web.portal.queue;
+package ru.alfaleasing.dealer.offer.api.queue;
 
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
