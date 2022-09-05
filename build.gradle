@@ -26,6 +26,7 @@ ext {
     set('minIOVersion', "7.1.2")
     set('openFeignMicrometrVersion', "11.6")
     set('lombokVersion', "1.18.24")
+    set('swaggerVersion', "2.9.2")
 }
 
 dependencies {
@@ -35,6 +36,8 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit"
     implementation "io.minio:minio:${minIOVersion}"
     implementation "io.github.openfeign:feign-micrometer:${openFeignMicrometrVersion}"
+    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 //	implementation "ru.alfaleasing:logging:release-2.2.1"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"

@@ -1,7 +1,7 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-    image: dealer-offer-api
+    image: nikitasologub/dealer-offer-api:v0012
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -22,7 +22,7 @@ services:
       - application-network
 
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
-    image: dealer-offer-web-portal
+    image: nikitasologub/dealer-offer-web-portal:v0016
     container_name: dealer-offer-web-portal
     ports:
       - "15072:15072"
@@ -30,7 +30,7 @@ services:
       - application-network
 
   avtomir-dealer-provider: # микросервис для похода на Автомир
-    image: avtomir-dealer-provider
+    image: loverloser1804/custom-dealer-self-loading-provider:1.1
     container_name: avtomir-dealer-provider
     ports:
       - "18420:18420"
