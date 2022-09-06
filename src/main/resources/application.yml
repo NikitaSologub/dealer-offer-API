@@ -18,17 +18,21 @@ spring:
       bindings:
         dealer-car-stock:
           destination: dealer-car-stock-exchange
+          group: dealer-car-stock-queue
           binder: rabbit
       binders:
         rabbit:
           type: rabbit
           environment:
-            virtual-host: ${RABBIT_VHOST:/}
-            port: ${RABBIT_PORT:5672}
-            username: ${RABBIT_USERNAME:guest}
-            password: ${RABBIT_PASSWORD:guest}
-  rabbitmq:
-    host: ${RABBIT_HOST:localhost}
+            spring:
+              rabbitmq:
+                virtual-host: ${RABBIT_VHOST:/}
+                port: ${RABBIT_PORT:5672}
+                username: ${RABBIT_USERNAME:guest}
+                password: ${RABBIT_PASSWORD:guest}
+                host: ${RABBIT_HOST:localhost}
+#  rabbitmq:
+#    host: ${RABBIT_HOST:localhost}
 
 #logging:
 #  level:
