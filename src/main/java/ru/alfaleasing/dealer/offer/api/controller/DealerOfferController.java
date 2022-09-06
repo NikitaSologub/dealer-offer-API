@@ -1,5 +1,8 @@
 package ru.alfaleasing.dealer.offer.api.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,11 @@ public class DealerOfferController {
 
     private final MinIOService minIOService;
 
+    @ApiOperation(value = "Метод для приёмки стока из автомира")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "dealers are loaded successfully"),
+        @ApiResponse(code = 401, message = "cannot load the dealer's list"),
+    })
     @PostMapping("/offers-by-api/new")
     public void getOffersByApi(@RequestBody Object offer){
         log.debug(LocalDateTime.now() + " request from avtomir-dealer-provider");

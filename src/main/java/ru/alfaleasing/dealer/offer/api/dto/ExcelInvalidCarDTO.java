@@ -1,6 +1,8 @@
 package ru.alfaleasing.dealer.offer.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,128 +12,81 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-/**
- * Dto с невалидными данными о автомобиле (все поля - типа String)
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ApiModel(description = "Dto с невалидными данными о автомобиле (все поля - типа String)")
 public class ExcelInvalidCarDTO {
-    /**
-     * Производитель
-     */
+
+    @ApiModelProperty(value = "Производитель", required = true)
     String brandName;
 
-    /**
-     * Имя модели
-     */
+    @ApiModelProperty(value = "Имя модели", required = true)
     String modelName;
 
-    /**
-     * Комплектация (equipmentName ?)
-     */
+    @ApiModelProperty(value = "Комплектация", required = true)
     String complectationName;
 
-    /**
-     * Год выпуска
-     */
+    @ApiModelProperty(value = "Год выпуска", required = true)
     String manufactureYear;
 
-    /**
-     * Опции
-     */
+    @ApiModelProperty(value = "Опции", required = true)
     String extras;
 
-    /**
-     * Цвет кузова
-     */
+    @ApiModelProperty(value = "Цвет кузова", required = true)
     String color;
 
-    /**
-     * VIN
-     */
+    @ApiModelProperty(value = "VIN", required = true)
     String vin;
 
-    /**
-     * Конечная стоимость автомобиля
-     */
+    @ApiModelProperty(value = "Конечная стоимость автомобиля", required = true)
     String dealerPrice;
 
-    /**
-     * Наличие / поставка
-     */
+    @ApiModelProperty(value = "Наличие / поставка", required = true)
     String availability;
 
-    /**
-     * Цвет обшивки салона
-     */
+    @ApiModelProperty(value = "Цвет обшивки салона")
     String interiorColor;
 
-    /**
-     * Изображение / фото
-     */
+    @ApiModelProperty(value = "Изображение / фото")
     List<String> images;
 
-    /**
-     * Дата поставки а/м
-     */
+    @ApiModelProperty(value = "Дата поставки а/м")
     String deliveryDate;
 
-    /**
-     * Дополнительное оборудование ()
-     */
+    @ApiModelProperty(value = "Дополнительное оборудование")
     @JsonProperty("extraDealerEquipment")
     List<EquipmentDTO> extraDealerEquipmentDTO;
 
-    /**
-     * РРЦ
-     */
+    @ApiModelProperty(value = "РРЦ")
     String msrp;
 
-    /**
-     * Размер скидки при покупке в лизинг
-     */
+    @ApiModelProperty(value = "Размер скидки при покупке в лизинг")
     String discount;
 
-    /**
-     * Местоположение авто
-     */
+    @ApiModelProperty(value = "Местоположение авто")
     String location;
 
-    /**
-     * Промо
-     */
+    @ApiModelProperty(value = "Промо")
     List<String> promo;
 
-    /**
-     * Онлайн бронирования
-     */
+    @ApiModelProperty(value = "Онлайн бронирования")
     String onlineReservation;
 
-    /**
-     * Коды дополнительных опций
-     */
+    @ApiModelProperty(value = "Коды дополнительных опций")
     String extraOptions;
 
-    /**
-     * Код модели от производителя
-     */
+    @ApiModelProperty(value = "Код модели от производителя")
     String modelCode;
 
-    /**
-     * Код комплектации от производителя
-     */
+    @ApiModelProperty(value = "Код комплектации от производителя")
     String equipmentCode;
 
-    /**
-     * Код цвета кузова от производителя
-     */
+    @ApiModelProperty(value = "Код цвета кузова от производителя")
     String colorCode;
 
-    /**
-     * Код цвета обшивки салона
-     */
+    @ApiModelProperty(value = "Код цвета обшивки салона")
     String interiorColorCode;
 }
