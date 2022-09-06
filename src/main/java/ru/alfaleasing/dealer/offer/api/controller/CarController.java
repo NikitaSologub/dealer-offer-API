@@ -1,5 +1,8 @@
 package ru.alfaleasing.dealer.offer.api.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +27,11 @@ public class CarController {
 
     private final CarService carService;
 
-    /**
-     * Для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин
-     *
-     * @param file файл с данными о автомобилях в формате xml
-     * @return Запрос со списками валидных автомобилей
-     */
+    @ApiOperation(value = "Для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = XmlSortedCarsResponse.class),
+        @ApiResponse(code = 401, message = "cannot load car stock"),
+    })
     @PostMapping(value = "/dealer/xml")
     @ResponseBody
     public ResponseEntity<XmlSortedCarsResponse> getSortedResponseXml(@RequestParam("file") MultipartFile file) {
@@ -38,12 +40,11 @@ public class CarController {
             .body(carService.getSortedCarsFromXml(file));
     }
 
-    /**
-     * Для извлечения автомобилей из xlsx файла и возвращения валидных и не валидных машин
-     *
-     * @param file файл с данными о автомобилях в формате xlsx
-     * @return Запрос со списками валидных автомобилей
-     */
+    @ApiOperation(value = "Для извлечения автомобилей из xlsx файла и возвращения валидных и не валидных машин")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
+        @ApiResponse(code = 401, message = "cannot load car stock"),
+    })
     @PostMapping(value = "/dealer/xlsx")
     @ResponseBody
     public ResponseEntity<ExcelSortedCarsResponse> getSortedResponseXlsx(@RequestParam("file") MultipartFile file) {
@@ -52,12 +53,11 @@ public class CarController {
             .body(carService.getSortedCarsFromXlsx(file));
     }
 
-    /**
-     * Для извлечения автомобилей из xls файла и возвращения валидных и не валидных машин
-     *
-     * @param file файл с данными о автомобилях в формате xls
-     * @return Запрос со списками валидных автомобилей
-     */
+    @ApiOperation(value = "Для извлечения автомобилей из xls файла и возвращения валидных и не валидных машин")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
+        @ApiResponse(code = 401, message = "cannot load car stock"),
+    })
     @PostMapping(value = "/dealer/xls")
     @ResponseBody
     public ResponseEntity<ExcelSortedCarsResponse> getSortedResponseXls(@RequestParam("file") MultipartFile file) {

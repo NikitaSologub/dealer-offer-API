@@ -23,11 +23,11 @@ public class Dealer {
     @ApiModelProperty(value = "Уникальный идентификатор дилера", required = true)
     String uid;
 
-//    @ApiModelProperty(value = "Регион")
-//    String region;
-//
-//    @ApiModelProperty(value = "Город")
-//    String city;
+    @ApiModelProperty(value = "Регион")
+    String region;
+
+    @ApiModelProperty(value = "Город")
+    String city;
 
     @ApiModelProperty(value = "Адрес", required = true)
     String address;

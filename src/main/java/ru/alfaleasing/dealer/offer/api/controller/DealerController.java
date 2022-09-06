@@ -16,13 +16,16 @@ import ru.alfaleasing.dealer.offer.api.dto.Dealer;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+/**
+ * Контроллер для работы с дилерами
+ */
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class DealerController {
 
-    @ApiOperation(value = "Метод для загрузки списка диллеров в БД шлюза")
+    @ApiOperation(value = "Метод для загрузки списка дилеров в БД шлюза")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "dealers are loaded successfully"),
         @ApiResponse(code = 401, message = " cannot load the dealer's list"),

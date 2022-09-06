@@ -1,5 +1,7 @@
 package ru.alfaleasing.dealer.offer.api.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,22 +9,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-/**
- * Дополнительное оборудование которое устанавливает сам дилер (может влиять на цену авто в сторону увеличения)
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ApiModel(description = "Дополнительное оборудование которое устанавливает сам дилер")
 public class EquipmentDTO {
-    /**
-     * Название дополнительного оборудования
-     */
+
+    @ApiModelProperty(value = "Название дополнительного оборудования")
     String name;
 
-    /**
-     * Стоимость дополнительного оборудования
-     */
+    @ApiModelProperty(value = "Стоимость дополнительного оборудования")
     String price;
 }

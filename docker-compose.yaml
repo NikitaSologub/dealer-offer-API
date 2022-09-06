@@ -1,7 +1,7 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-    image: nikitasologub/dealer-offer-api:v0013
+#    image: nikitasologub/dealer-offer-api:v0014
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
