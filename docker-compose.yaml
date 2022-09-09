@@ -1,7 +1,9 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-    image: nikitasologub/dealer-offer-api:v0016
+#    image: nikitasologub/dealer-offer-api:v0016
+    image: dealer-offer-api
+    build: .
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -22,7 +24,7 @@ services:
       - application-network
 
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
-    image: nikitasologub/dealer-offer-web-portal:v0016
+    image: nikitasologub/dealer-offer-web-portal:v0017
     container_name: dealer-offer-web-portal
     ports:
       - "15072:15072"
