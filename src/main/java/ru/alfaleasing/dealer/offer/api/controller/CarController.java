@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.alfaleasing.dealer.offer.api.dto.ExcelSortedCarsResponse;
-import ru.alfaleasing.dealer.offer.api.dto.XmlSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.dto.ExcelCarDTO;
+//import ru.alfaleasing.dealer.offer.api.dto.ExcelSortedCarsResponse;
+import ru.alfaleasing.dealer.offer.api.dto.XmlCarDTO;
+//import ru.alfaleasing.dealer.offer.api.dto.XmlSortedCarsResponse;
 import ru.alfaleasing.dealer.offer.api.service.CarService;
+
+import java.util.List;
 
 /**
  * Контроллер для получения списков валидных и невалидных автомобилей из приходящих файлов
@@ -29,12 +33,13 @@ public class CarController {
 
     @ApiOperation(value = "Для извлечения автомобилей из xml файла и возвращения валидных и не валидных машин")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "car stock loaded successfully", response = XmlSortedCarsResponse.class),
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = XmlCarDTO.class, responseContainer = "List"),
+//        @ApiResponse(code = 200, message = "car stock loaded successfully", response = XmlSortedCarsResponse.class),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
     @PostMapping(value = "/dealer/xml")
     @ResponseBody
-    public ResponseEntity<XmlSortedCarsResponse> getSortedResponseXml(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<XmlCarDTO>> getSortedResponseXml(@RequestParam("file") MultipartFile file) {
         return ResponseEntity
             .ok()
             .body(carService.getSortedCarsFromXml(file));
@@ -42,12 +47,13 @@ public class CarController {
 
     @ApiOperation(value = "Для извлечения автомобилей из xlsx файла и возвращения валидных и не валидных машин")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelCarDTO.class, responseContainer = "List"),
+//        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
     @PostMapping(value = "/dealer/xlsx")
     @ResponseBody
-    public ResponseEntity<ExcelSortedCarsResponse> getSortedResponseXlsx(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<ExcelCarDTO>> getSortedResponseXlsx(@RequestParam("file") MultipartFile file) {
         return ResponseEntity
             .ok()
             .body(carService.getSortedCarsFromXlsx(file));
@@ -55,12 +61,13 @@ public class CarController {
 
     @ApiOperation(value = "Для извлечения автомобилей из xls файла и возвращения валидных и не валидных машин")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
+        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelCarDTO.class, responseContainer = "List"),
+//        @ApiResponse(code = 200, message = "car stock loaded successfully", response = ExcelSortedCarsResponse.class),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
     @PostMapping(value = "/dealer/xls")
     @ResponseBody
-    public ResponseEntity<ExcelSortedCarsResponse> getSortedResponseXls(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<ExcelCarDTO>> getSortedResponseXls(@RequestParam("file") MultipartFile file) {
         return ResponseEntity
             .ok()
             .body(carService.getSortedCarsFromXls(file));

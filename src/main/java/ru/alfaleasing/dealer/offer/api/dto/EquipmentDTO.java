@@ -1,5 +1,6 @@
 package ru.alfaleasing.dealer.offer.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -18,8 +19,14 @@ import lombok.experimental.FieldDefaults;
 public class EquipmentDTO {
 
     @ApiModelProperty(value = "Название дополнительного оборудования")
+    @JsonProperty("name")
     String name;
 
     @ApiModelProperty(value = "Стоимость дополнительного оборудования")
+    @JsonProperty("price")
     String price;
+
+    @ApiModelProperty(value = "Количество единиц дополнительного оборудования")
+    @JsonProperty("count")
+    private String count;
 }
