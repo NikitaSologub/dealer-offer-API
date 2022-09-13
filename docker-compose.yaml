@@ -1,9 +1,9 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-#    image: nikitasologub/dealer-offer-api:v0016
-    image: dealer-offer-api
-    build: .
+    image: nikitasologub/dealer-offer-api:v0020
+#    image: dealer-offer-api
+#    build: .
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -17,29 +17,29 @@ services:
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
       MINIO_ROOT_URL: http://minio:9000/
-      MINIO_BUCKET: retrobucket
+      MINIO_BUCKET: retrobucket #svc-yc-car-search
       MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
       MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
     networks:
       - application-network
 
-  dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
-    image: nikitasologub/dealer-offer-web-portal:v0018
-    container_name: dealer-offer-web-portal
-    ports:
-      - "15072:15072"
-    networks:
-      - application-network
-
-  avtomir-dealer-provider: # микросервис для похода на Автомир
-    image: loverloser1804/custom-dealer-self-loading-provider:1.1
-    container_name: avtomir-dealer-provider
-    ports:
-      - "18420:18420"
-    environment:
-      DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
-    networks:
-      - application-network
+#  dealer-offer-web-portal: # микросервис для работы с excel файлами
+#    image: nikitasologub/dealer-offer-web-portal:v0018
+#    container_name: dealer-offer-web-portal
+#    ports:
+#      - "15072:15072"
+#    networks:
+#      - application-network
+#
+#  avtomir-dealer-provider: # микросервис для похода на Автомир
+#    image: loverloser1804/custom-dealer-self-loading-provider:1.1
+#    container_name: avtomir-dealer-provider
+#    ports:
+#      - "18420:18420"
+#    environment:
+#      DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
+#    networks:
+#      - application-network
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
@@ -64,7 +64,7 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_BUCKET: retrobucket
+      MINIO_BUCKET: retrobucket  #svc-yc-car-search
       MINIO_ROOT_USER: Q3AM3UQ867SPQQA43P2F
       MINIO_ROOT_PASSWORD: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
     networks:
