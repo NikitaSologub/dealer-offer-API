@@ -3,12 +3,10 @@ server:
   servlet.context-path: /dealer-offer-API
 
 minio:
-  url: ${MINIO_ROOT_URL:https://localhost:9000/}
-  bucket: ${MINIO_BUCKET:svc-yc-car-search} # retrobucket
+  url: ${MINIO_ROOT_URL:https://localhost:9000/} # для dev - https://storage.yandexcloud.net/
+  bucket: ${MINIO_BUCKET:svc-yc-car-search}
   access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
   secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
-#  https://storage.yandexcloud.net/svc-yc-car-search/<key>?<parameters> - вариант 1
-#  https://svc-yc-car-search.storage.yandexcloud.net/<key>?<parameters> - вариант 2
 spring:
   cloud:
     stream:

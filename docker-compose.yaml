@@ -16,8 +16,8 @@ services:
       RABBIT_PORT: "5672"
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
-      MINIO_ROOT_URL: http://minio:9000/
-      MINIO_BUCKET: svc-yc-car-search # retrobucket
+      MINIO_ROOT_URL: http://minio:9000/ # (если хочешь идти на dev - https://storage.yandexcloud.net/)
+      MINIO_BUCKET: svc-yc-car-search
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
     networks:

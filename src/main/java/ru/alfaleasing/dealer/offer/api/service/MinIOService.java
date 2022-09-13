@@ -68,7 +68,7 @@ public class MinIOService {
      * Метод создаёт bucket в пространстве minIO если его не существует
      */
     @SneakyThrows
-    private void createBucketIfNotExists() {
+    private void createBucketIfNotExists() {// todo - для этого на dev и prod не будет прав. Продумать проброс ошибки
         boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder()
             .bucket(bucketName)
             .build());
