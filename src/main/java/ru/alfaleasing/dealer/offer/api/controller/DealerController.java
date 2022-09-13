@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alfaleasing.dealer.offer.api.dto.Dealer;
+import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -31,8 +31,8 @@ public class DealerController {
         @ApiResponse(code = 401, message = " cannot load the dealer's list"),
     })
     @PostMapping("/load/dealers")
-    public ResponseEntity<?> getOffersByApi(@ApiParam @RequestBody Dealer[] dealer){
-        log.debug(LocalDateTime.now() + " request from postman to /v1/dealer/load");
+    public ResponseEntity<?> getOffersByApi(@ApiParam @RequestBody DealerDTO[] dealer){
+        log.info(LocalDateTime.now() + " request from postman to /v1/dealer/load");
         System.out.println("dealer's array from postman = " + Arrays.toString(dealer));
         return ResponseEntity.ok().build();
     }

@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiModel(description = "Dto c валидной информацией о дилере")
-public class Dealer {
+public class DealerDTO {
 
     @ApiModelProperty(value = "Наименование дилера", required = true)
     String dealer;
