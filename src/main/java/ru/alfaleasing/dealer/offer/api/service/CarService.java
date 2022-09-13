@@ -2,10 +2,10 @@ package ru.alfaleasing.dealer.offer.api.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
+import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
 import ru.alfaleasing.dealer.offer.api.queue.processor.QueueProcessor;
 
 import java.util.List;
@@ -27,14 +27,24 @@ public class CarService {
      * Метод используется для загрузки стоков и помещения их в minIO и отправки объекта в RabbitMQ
      *
      * @param stock данные о автомобилях которые нужно загрузить
-     * @return Запрос со списками валидных и не валидных автомобилей
+     * @param methodType способ загрузки данных (FILE, API)
+     * @param salonId UUID конкретного дилера
      */
-    public List<StockDTO> loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId) {
+    public void loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId) {
         log.info("Попали в сервис и пытаемся положить стоки в Rabbit и minIO {}", stock);
         System.out.println("methodType = " + methodType);
         System.out.println("salonId = " + salonId);
-        queueProcessor.publishMessage(stock);
-        minIOService.writeFileToMinIO(stock);
-        return stock;
+        String fileName = minIOService.writeFileToMinIO(stock, salonId);
+
+        TaskDTO taskDTO = new TaskDTO();
+        taskDTO.setTaskUid(UUID.randomUUID());
+        taskDTO.setDealerUid(salonId);
+        taskDTO.setDealerName("Автомир");
+        taskDTO.setCity("Москва");
+//        taskDTO.setDealer(new Dealer(salonId,"Автомир"));
+        taskDTO.setUsed(false);
+        taskDTO.setS3ObjectName(fileName);
+
+        queueProcessor.publishMessage(taskDTO);
     }
 }

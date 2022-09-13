@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
@@ -26,6 +27,8 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 public class MinIOService {
 
     private static final String JSON = ".json";
+    public static final String PART_001 = "-part001";
+    public static final String SLASH = "-";
     private final ObjectMapper objectMapper;
     private final MinioClient minioClient;
 
@@ -38,8 +41,8 @@ public class MinIOService {
      * @param response объект стоков валидных и не валидных автомобилей который будет записан в minIO в формате JSON
      */
     @SneakyThrows
-    public void writeFileToMinIO(Object response) {
-        String filename = LocalDateTime.now() + JSON;
+    public String writeFileToMinIO(Object response, UUID salonId) {
+        String filename = createFileName(salonId);
         try {
             createBucketIfNotExists();
 
@@ -56,7 +59,9 @@ public class MinIOService {
             log.info("{} successfully uploaded to: container: {}   blob: {}", filename, bucketName, filename);
         } catch (MinioException e) {
             log.info("Error occurred: " + e);
+            return "FILE_IS_NOT_WRITTEN_TO_MINIO_BUCKET";
         }
+        return filename;
     }
 
     /**
@@ -72,5 +77,12 @@ public class MinIOService {
                 .bucket(bucketName)
                 .build());
         }
+    }
+
+    /**
+     * Метод создаёт имя для названия файла в minIO
+     */
+    private String createFileName(UUID salonId) {
+        return LocalDate.now() + SLASH + salonId + PART_001 + JSON;
     }
 }

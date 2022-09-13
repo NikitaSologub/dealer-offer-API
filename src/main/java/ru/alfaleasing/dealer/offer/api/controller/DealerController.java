@@ -23,7 +23,7 @@ import java.util.Arrays;
 @RequestMapping("/v1")
 @RequiredArgsConstructor
 @Slf4j
-public class DealerController {
+public class DealerController { // todo - перенести его в dealer-offer-web-portal
 
     @ApiOperation(value = "Метод для загрузки списка дилеров в БД шлюза")
     @ApiResponses(value = {
