@@ -7,18 +7,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.service.CarService;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
- * Контроллер для получения списков валидных стоков из dealer-offer-web-portal
+ * Контроллер для загрузки стоков из dealer-offer-web-portal
  */
 @RestController
 @RequestMapping("/v1")
@@ -28,29 +29,38 @@ public class StockController {
 
     private final CarService carService;
 
-    @ApiOperation(value = "Для извлечения автомобилей из xlsx файла и возвращения валидных и не валидных машин")
+    @ApiOperation(value = "Для загрузки стоков")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "car stock loaded successfully", response = StockDTO.class, responseContainer = "List"),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
-    @PostMapping(value = "/dealer/xlsx")
+    @PostMapping(value = "/offers-by-api/new/")
     @ResponseBody
-    public ResponseEntity<List<StockDTO>> getSortedResponseXlsx(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> loadStock(@RequestHeader("Authorization") String authorization,
+                                       @RequestHeader("X-METHOD-TYPE") String methodType, // FILE
+                                       @RequestHeader("X-SALON-UID") UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                                       @RequestHeader("X-CLIENT-ID") String clientId, // dschemeris - OAuth2
+                                       @RequestBody List<StockDTO> stock) {
         return ResponseEntity
             .ok()
-            .body(carService.getSortedCarsFromXlsx(file));
+            .body(carService.loadStocksToMinioAndRabbit(stock, methodType, salonUid));
     }
 
-    @ApiOperation(value = "Для извлечения автомобилей из xls файла и возвращения валидных и не валидных машин")
+    @ApiOperation(value = "Для автомобилей из xls файла и возвращения валидных и не валидных машин")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "car stock loaded successfully", response = StockDTO.class, responseContainer = "List"),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
-    @PostMapping(value = "/dealer/xls")
+    @PostMapping(value = "/offers-by-api/new2/")
     @ResponseBody
-    public ResponseEntity<List<StockDTO>> getSortedResponseXls(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> loadStock2(@RequestHeader("Authorization") String authorization,
+                                        @RequestHeader("X-METHOD-TYPE") String methodType, // FILE
+                                        @RequestHeader("X-SALON-UID") UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                                        @RequestHeader("X-CLIENT-ID") String clientId, // dschemeris - OAuth2
+                                        @RequestBody List<StockDTO> stock) {
+        System.out.println("Вы попали по адресу v1/offers-by-api/new2/");
+        System.out.println("Authorization " + authorization);
         return ResponseEntity
-            .ok()
-            .body(carService.getSortedCarsFromXls(file));
+            .ok().build();
     }
 }

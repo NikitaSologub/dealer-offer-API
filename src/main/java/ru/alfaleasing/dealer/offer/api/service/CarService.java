@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import ru.alfaleasing.dealer.offer.api.client.DealerOfferWebPortalClient;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.queue.processor.QueueProcessor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с документами автомобилей
@@ -21,36 +20,19 @@ import java.util.List;
 @Transactional
 public class CarService {
 
-    private final DealerOfferWebPortalClient dealerOfferWebPortalClient;
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
 
-    @Value("${client.dealer-offer-web-portal.url}")
-    private String url;
-
     /**
-     * Метод используется для извлечения автомобилей из xlsx файла и возвращения валидных и не валидных машин
+     * Метод используется для загрузки стоков и помещения их в minIO и отправки объекта в RabbitMQ
      *
-     * @param file файл с данными о автомобилях в формате xlsx
+     * @param stock данные о автомобилях которые нужно загрузить
      * @return Запрос со списками валидных и не валидных автомобилей
      */
-    public List<StockDTO> getSortedCarsFromXlsx(MultipartFile file) {
-        log.info("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xlsx", url);
-        List<StockDTO> stock = dealerOfferWebPortalClient.getSortedCarsFromXlsxFile(file);
-        queueProcessor.publishMessage(stock);
-        minIOService.writeFileToMinIO(stock);
-        return stock;
-    }
-
-    /**
-     * Метод используется для извлечения автомобилей из xls файла и возвращения валидных и не валидных машин
-     *
-     * @param file файл с данными о автомобилях в формате xls
-     * @return Запрос со списками валидных и не валидных автомобилей
-     */
-    public List<StockDTO> getSortedCarsFromXls(MultipartFile file) {
-        log.info("Попали в сервис и пытаемся сходить на url: {}/v1/dealer/xls", url);
-        List<StockDTO> stock = dealerOfferWebPortalClient.getSortedCarsFromXlsFile(file);
+    public List<StockDTO> loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId) {
+        log.info("Попали в сервис и пытаемся положить стоки в Rabbit и minIO {}", stock);
+        System.out.println("methodType = " + methodType);
+        System.out.println("salonId = " + salonId);
         queueProcessor.publishMessage(stock);
         minIOService.writeFileToMinIO(stock);
         return stock;

@@ -2,13 +2,9 @@ server:
   port: 15073
   servlet.context-path: /dealer-offer-API
 
-client:
-  dealer-offer-web-portal:
-    url: ${DEALER_OFFER_WEB_PORTAL_URL:http://localhost:15072}/dealer-offer-web-portal
-
 minio:
-  url: ${MINIO_ROOT_URL:https://localhost:9000/} # http://minio.k8s-dev.yc.alfaleasing.ru/
-  bucket: ${MINIO_BUCKET:svc-yc-car-search}
+  url: ${MINIO_ROOT_URL:https://localhost:9000/}
+  bucket: ${MINIO_BUCKET:retrobucket}
   access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
   secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
 
