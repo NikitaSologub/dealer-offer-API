@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Data
@@ -17,8 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ApiModel(description = "Представление данных автомобиля из xml документа")
-public class XmlCarDTO {
+@ApiModel(description = "Dto c валидной информацией о стоке")
+public class StockDTO {
 
     @ApiModelProperty(value = "Производитель", required = true)
     @JsonProperty("make")
@@ -34,11 +35,11 @@ public class XmlCarDTO {
 
     @ApiModelProperty(value = "Год выпуска", required = true)
     @JsonProperty("manufacture_year")
-    String manufactureYear;
+    BigInteger manufactureYear;
 
     @ApiModelProperty(value = "Опции", required = true)
     @JsonProperty("description_complectation")
-    String descriptionComplectation;
+    List<DescriptionDTO> descriptionComplectation;
 
     @ApiModelProperty(value = "Цвет кузова", required = true)
     @JsonProperty("color")
@@ -50,7 +51,7 @@ public class XmlCarDTO {
 
     @ApiModelProperty(value = "Конечная стоимость автомобиля", required = true)
     @JsonProperty("price")
-    String price;
+    BigInteger price;
 
     @ApiModelProperty(value = "Наличие / поставка", required = true)
     @JsonProperty("availability")
@@ -74,17 +75,17 @@ public class XmlCarDTO {
 
     @ApiModelProperty(value = "РРЦ")
     @JsonProperty("msrp")
-    String msrp;
+    BigInteger msrp;
 
     @ApiModelProperty(value = "Размер скидки при покупке в лизинг")
     @JsonProperty("discount")
-    String discount;
+    BigInteger discount;
 
     @ApiModelProperty(value = "Местоположение авто")
     @JsonProperty("location")
     String location;
 
-    @ApiModelProperty(value = "Промо (Описание скидки, подарочного предложения)")
+    @ApiModelProperty(value = "Промо")
     @JsonProperty("promo")
     List<String> promo;
 
@@ -92,9 +93,13 @@ public class XmlCarDTO {
     @JsonProperty("online_reservation")
     String onlineReservation;
 
+    @ApiModelProperty(value = "Коды дополнительных опций")
+    @JsonProperty("extra_options")
+    List<String> extraOptions;
+
     @ApiModelProperty(value = "Код цвета кузова от производителя")
     @JsonProperty("color_code")
-    String colorCode;
+    BigInteger colorCode;
 
     @ApiModelProperty(value = "Код цвета обшивки салона")
     @JsonProperty("interior_color_code")

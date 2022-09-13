@@ -4,13 +4,13 @@ server:
 
 client:
   dealer-offer-web-portal:
-    url: ${DEALER_OFFER_WEB_PORTAL_URL:http://localhost:15072}/dealer-offer-web-portal/v1/dealer
+    url: ${DEALER_OFFER_WEB_PORTAL_URL:http://localhost:15072}/dealer-offer-web-portal
 
 minio:
-  url: ${MINIO_ROOT_URL:https://localhost:9000/} #(by default - https://play.min.io)
-  bucket: ${MINIO_BUCKET:retrobucket}
-  access-key: ${MINIO_ROOT_USER:Q3AM3UQ867SPQQA43P2F}
-  secret-key: ${MINIO_ROOT_PASSWORD:zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG}
+  url: ${MINIO_ROOT_URL:https://localhost:9000/} # http://minio.k8s-dev.yc.alfaleasing.ru/
+  bucket: ${MINIO_BUCKET:svc-yc-car-search}
+  access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
+  secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
 
 spring:
   cloud:

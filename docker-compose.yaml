@@ -24,7 +24,7 @@ services:
       - application-network
 
   dealer-offer-web-portal: # микросервис для работы с excel и xml файлами
-    image: nikitasologub/dealer-offer-web-portal:v0017
+    image: nikitasologub/dealer-offer-web-portal:v0018
     container_name: dealer-offer-web-portal
     ports:
       - "15072:15072"

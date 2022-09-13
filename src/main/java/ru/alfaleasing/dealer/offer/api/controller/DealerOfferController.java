@@ -28,7 +28,7 @@ public class DealerOfferController {
     })
     @PostMapping("/offers-by-api/new")
     public void getOffersByApi(@RequestBody Object offer){
-        log.debug(LocalDateTime.now() + " request from avtomir-dealer-provider");
+        log.info(LocalDateTime.now() + " request from avtomir-dealer-provider");
         minIOService.writeFileToMinIO(offer);
     }
 }

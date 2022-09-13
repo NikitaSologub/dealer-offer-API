@@ -7,21 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alfaleasing.dealer.offer.api.dto.ExcelCarDTO;
-import ru.alfaleasing.dealer.offer.api.dto.XmlCarDTO;
+import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.queue.QueueReceiver;
 import ru.alfaleasing.dealer.offer.api.queue.QueueSender;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +32,8 @@ public class QueueProcessor {
      * @param data данными о автомобилях в формате которые запишем в очередь
      */
     public void publishMessage(Object data) {
-        log.debug("Записываем сообщение в очередь: {}", data);
+        log.info("Записываем сообщение в очередь: {}", data);
         queueSender.sendCarStock().send(MessageBuilder.withPayload(data)
-//            .setHeader("x-time-created", LocalDateTime.now())
             .build());
     }
 
@@ -49,7 +42,7 @@ public class QueueProcessor {
      */
     @StreamListener(QueueReceiver.DEALER_CAR_STOCK)
     public void receiver(Message message) {
-        log.debug("Принимаем сообщение из очереди: {}", message);
+        log.info("Принимаем сообщение из очереди: {}", message);
         System.out.println("Принимаем сообщение из очереди: " + message);
         //        MessageHeaders headers = message.getHeaders();
 //        System.out.println("getHeaders:" + message.getHeaders());
@@ -63,21 +56,12 @@ public class QueueProcessor {
         System.out.println("Из очереди получили список валидных автомобилей (как строку JSON)= " + validCarsJsonString);
 
         try { // todo - Временное решение пока не определён общий формат данных
-            List<XmlCarDTO> list = objectMapper.readValue(validCarsJsonString, new TypeReference<List<XmlCarDTO>>() { });
-            System.out.println("Парсим из строки список объектов типа XmlCarDTO");
+            List<StockDTO> list = objectMapper.readValue(validCarsJsonString, new TypeReference<List<StockDTO>>() {});
+            System.out.println("Парсим из строки список объектов типа ExcelCarDTO");
             list.forEach(System.out::println);
-        } catch (JsonProcessingException e) {
-            System.out.println("Не удалось разобрать тело запроса из Json в объекты XmlCarDTO");
-            log.debug("Не удалось разобрать тело запроса из Json в объекты XmlCarDTO");
-
-            try {
-                List<ExcelCarDTO> list = objectMapper.readValue(validCarsJsonString, new TypeReference<List<ExcelCarDTO>>() { });
-                System.out.println("Парсим из строки список объектов типа ExcelCarDTO");
-                list.forEach(System.out::println);
-            } catch (JsonProcessingException jsonProcessingException) {
-                System.out.println("Не удалось разобрать тело запроса из Json в объекты ExcelCarDTO");
-                log.debug("Не удалось разобрать тело запроса из Json в объекты ExcelCarDTO");
-            }
+        } catch (JsonProcessingException jsonProcessingException) {
+            System.out.println("Не удалось разобрать тело запроса из Json в объекты ExcelCarDTO");
+            log.info("Не удалось разобрать тело запроса из Json в объекты ExcelCarDTO");
         }
     }
 }
