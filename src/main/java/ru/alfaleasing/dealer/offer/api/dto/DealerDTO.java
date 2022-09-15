@@ -23,13 +23,13 @@ public class DealerDTO {
     @ApiModelProperty(value = "Уникальный идентификатор дилера", required = true)
     String uid;
 
-    @ApiModelProperty(value = "Регион")
+    @ApiModelProperty(value = "Регион", required = true)
     String region;
 
     @ApiModelProperty(value = "Город")
     String city;
 
-    @ApiModelProperty(value = "Адрес", required = true)
+    @ApiModelProperty(value = "Адрес")
     String address;
 
     @ApiModelProperty(value = "ИНН", required = true)
