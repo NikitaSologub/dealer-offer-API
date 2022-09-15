@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
-import ru.alfaleasing.dealer.offer.api.queue.processor.QueueProcessor;
+import ru.alfaleasing.dealer.offer.api.stream.processor.QueueProcessor;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +36,7 @@ public class CarService {
         System.out.println("salonId = " + salonId);
         String fileName = minIOService.writeFileToMinIO(stock, salonId);
 
+        // 1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTaskUid(UUID.randomUUID());
         taskDTO.setDealerUid(salonId);
@@ -45,6 +46,9 @@ public class CarService {
         taskDTO.setUsed(false);
         taskDTO.setS3ObjectName(fileName);
 
+        // 2) Записываем в RabbitMQ объект типа task
         queueProcessor.publishMessage(taskDTO);
+
+        // 3) Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)
     }
 }

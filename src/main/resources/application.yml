@@ -1,6 +1,6 @@
 server:
   port: 15073
-  servlet.context-path: /dealer-offer-API
+  servlet.context-path: /dealer-offer-api
 
 minio:
   url: ${MINIO_ROOT_URL:https://localhost:9000/} # для dev - https://storage.yandexcloud.net/
@@ -13,19 +13,30 @@ spring:
       rabbit:
         bindings:
           dealer-car-stock:
-            consumer:
-              exchangeType: direct
-#              autoBindDlq: true # Открывать ли очередь недоставленных сообщений
-              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
-              bindingRoutingKey: "#" # Какие из RoutingKey (через запятую) использовать для связывания
-              bindingRoutingKeyDelimiter: "," # Разделить варианты использования bindingRoutingKey
             producer:
-              exchangeType: direct
-#              routingKeyExpression: "'presale.sms.event.create'"
+              routingKeyExpression: "'new-offers-list.event.create'"
+
+#            consumer:
+#              exchangeType: direct
+#              bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
+#              bindingRoutingKeyDelimiter: ","
+#              bindQueue: true
+              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
+          dealer-car-stock-reading:
+            consumer:
+              bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
+              bindingRoutingKeyDelimiter: ","
+              bindQueue: true
+              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
+
       bindings:
         dealer-car-stock:
-          destination: dealer-car-stock-exchange
-          group: dealer-car-stock-queue
+          destination: dealer_offer_api
+          group: to.stock-service.new-offers-list
+          binder: rabbit
+        dealer-car-stock-reading:
+          destination: dealer_offer_api.to.stock-service.new-offers-list
+          group: to.stock-service.new-offers-list
           binder: rabbit
       binders:
         rabbit:
@@ -38,9 +49,7 @@ spring:
                 username: ${RABBIT_USERNAME:guest}
                 password: ${RABBIT_PASSWORD:guest}
                 host: ${RABBIT_HOST:localhost}
-#                deliveryMode: ${DELIVERY_MODE:2}
-#  rabbitmq:
-#    host: ${RABBIT_HOST:localhost}
+                deliveryMode: ${DELIVERY_MODE:2}
 
 #logging:
 #  level:

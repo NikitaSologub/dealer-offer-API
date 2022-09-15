@@ -1,0 +1,21 @@
+{
+  "task_uid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "DONE",
+  "results": [
+    {
+      "vin": "XW8ZZZ16ZGN902558",
+      "status": "mapping_failed",
+      "description": "ТС не было опубликовано - не удалось смапить модель с КЛИ"
+    },
+    {
+      "vin": "EW8ZNZ16ZGN902558",
+      "status": "published",
+      "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
+    },
+    {
+      "vin": "TW8ZZC16ZGN902558",
+      "status": "goi_decliend",
+      "description": "ТС не было опубликовано - проверка ГОИ не пройдена"
+    }
+  ]
+}
