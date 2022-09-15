@@ -32,6 +32,7 @@ public class StockController {
     public static final String X_METHOD_TYPE = "X-METHOD-TYPE";
     public static final String X_SALON_UID = "X-SALON-UID";
     public static final String X_CLIENT_ID = "X-CLIENT-ID";
+    public static final String X_SOURSE = "X-SOURSE";
     private final CarService carService;
 
     @ApiOperation(value = "Для загрузки стоков")
@@ -41,13 +42,15 @@ public class StockController {
     })
     @PostMapping(value = "/offers-by-api/new/")
     @ResponseBody
-    public ResponseEntity<?> loadStock(@RequestHeader(AUTHORIZATION) String authorization,
-                                       @RequestHeader(X_METHOD_TYPE) String methodType, // FILE
+    public ResponseEntity<?> loadStock(@RequestHeader(AUTHORIZATION) String token,
+                                       @RequestHeader(X_SOURSE) String source,  // FILE или EXTERNAL_API
                                        @RequestHeader(X_SALON_UID) UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
                                        @RequestHeader(X_CLIENT_ID) String clientId, // dschemeris - OAuth2
+                                       @RequestHeader(X_METHOD_TYPE) String methodType,
                                        @RequestBody List<StockDTO> stock) {
 
-        if (methodType == null || Type.API.name().equals(methodType)) {
+
+        if (methodType == null || Type.EXTERNAL_API.name().equals(methodType)) {
             log.info("Начинаем загрузку стоков по API из Automir");
         } else if (Type.FILE.name().equals(methodType)) {
             log.info("Начинаем загрузку стоков по файлу из dealer-offer-web-portal");
