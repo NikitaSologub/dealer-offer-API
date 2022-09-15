@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.annotation.Nullable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,14 +21,15 @@ import lombok.experimental.FieldDefaults;
 public class EquipmentDTO {
 
     @ApiModelProperty(value = "Название дополнительного оборудования")
-    @JsonProperty("name")
-    String name;
+    @JsonProperty("equipment_name")
+    String equipmentName;
 
     @ApiModelProperty(value = "Стоимость дополнительного оборудования")
-    @JsonProperty("price")
-    String price;
+    @JsonProperty("equipment_price")
+    @Nullable
+    String equipmentPrice;
 
     @ApiModelProperty(value = "Количество единиц дополнительного оборудования")
-    @JsonProperty("count")
-    private String count;
+    @JsonProperty("equipment_count")
+    private String equipmentCount;
 }

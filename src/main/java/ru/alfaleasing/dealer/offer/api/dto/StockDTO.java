@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.annotation.Nullable;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -74,11 +75,12 @@ public class StockDTO {
     List<EquipmentDTO> additionalEquipment;
 
     @ApiModelProperty(value = "РРЦ")
-    @JsonProperty("msrp")
-    BigInteger msrp;
+    @JsonProperty("price_additional_equipment")
+    BigInteger priceAdditionalEquipment;
 
     @ApiModelProperty(value = "Размер скидки при покупке в лизинг")
     @JsonProperty("discount")
+    @Nullable
     BigInteger discount;
 
     @ApiModelProperty(value = "Местоположение авто")
@@ -87,6 +89,7 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Промо")
     @JsonProperty("promo")
+    @Nullable
     List<String> promo;
 
     @ApiModelProperty(value = "Онлайн бронирование")
@@ -95,6 +98,7 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Коды дополнительных опций")
     @JsonProperty("extra_options")
+    @Nullable
     List<String> extraOptions;
 
     @ApiModelProperty(value = "Код цвета кузова от производителя")
@@ -107,6 +111,7 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Код модели от производителя")
     @JsonProperty("model_code")
+    @Nullable
     String modelCode;
 
     @ApiModelProperty(value = "Код комплектации от производителя")
