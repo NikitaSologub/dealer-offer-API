@@ -36,6 +36,7 @@ public class CarService {
         System.out.println("salonId = " + salonId);
         String fileName = minIOService.writeFileToMinIO(stock, salonId);
 
+        log.info("Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
         // 1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTaskUid(UUID.randomUUID());
@@ -47,8 +48,10 @@ public class CarService {
         taskDTO.setS3ObjectName(fileName);
 
         // 2) Записываем в RabbitMQ объект типа task
+        log.info("Записываем в RabbitMQ объект типа task");
         queueProcessor.publishMessage(taskDTO);
 
+        log.info("Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)");
         // 3) Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)
     }
 }

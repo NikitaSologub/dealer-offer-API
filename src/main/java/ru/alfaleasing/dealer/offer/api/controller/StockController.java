@@ -29,10 +29,9 @@ import java.util.UUID;
 public class StockController {
 
     public static final String AUTHORIZATION = "Authorization";
-    public static final String X_METHOD_TYPE = "X-METHOD-TYPE";
+    public static final String X_SOURCE = "X-SOURCE";
     public static final String X_SALON_UID = "X-SALON-UID";
     public static final String X_CLIENT_ID = "X-CLIENT-ID";
-    public static final String X_SOURSE = "X-SOURSE";
     private final CarService carService;
 
     @ApiOperation(value = "Для загрузки стоков")
@@ -40,22 +39,21 @@ public class StockController {
         @ApiResponse(code = 200, message = "car stock loaded successfully", response = StockDTO.class, responseContainer = "List"),
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
-    @PostMapping(value = "/offers-by-api/new/")
-    @ResponseBody
+    @PostMapping(value = "/offers-by-api/new")
     public ResponseEntity<?> loadStock(@RequestHeader(AUTHORIZATION) String token,
-                                       @RequestHeader(X_SOURSE) String source,  // FILE или EXTERNAL_API
+                                       @RequestHeader(X_SOURCE) String source,  // FILE или EXTERNAL_API
                                        @RequestHeader(X_SALON_UID) UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
                                        @RequestHeader(X_CLIENT_ID) String clientId, // dschemeris - OAuth2
-                                       @RequestHeader(X_METHOD_TYPE) String methodType,
                                        @RequestBody List<StockDTO> stock) {
 
+        log.info("clientId is {}", clientId);
 
-        if (methodType == null || Type.EXTERNAL_API.name().equals(methodType)) {
+        if (source == null || Type.EXTERNAL_API.name().equals(source)) {
             log.info("Начинаем загрузку стоков по API из Automir");
-        } else if (Type.FILE.name().equals(methodType)) {
+        } else if (Type.FILE.name().equals(source)) {
             log.info("Начинаем загрузку стоков по файлу из dealer-offer-web-portal");
         }
-        carService.loadStocksToMinioAndRabbit(stock, methodType, salonUid);
+        carService.loadStocksToMinioAndRabbit(stock, source, salonUid);
 
         return ResponseEntity
             .ok().build();
