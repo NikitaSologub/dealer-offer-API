@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.api.queue.processor;
+package ru.alfaleasing.dealer.offer.api.stream.processor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,8 +10,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
-import ru.alfaleasing.dealer.offer.api.queue.QueueReceiver;
-import ru.alfaleasing.dealer.offer.api.queue.QueueSender;
+import ru.alfaleasing.dealer.offer.api.stream.QueueReceiver;
+import ru.alfaleasing.dealer.offer.api.stream.QueueSender;
 
 import java.nio.charset.StandardCharsets;
 

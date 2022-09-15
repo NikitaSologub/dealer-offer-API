@@ -1,9 +1,7 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-#    image: nikitasologub/dealer-offer-api:v0020
-    image: dealer-offer-api
-    build: .
+    image: nikitasologub/dealer-offer-api:v0022
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -11,26 +9,27 @@ services:
       - rabbitmq
       - minio
     environment:
-      DEALER_OFFER_WEB_PORTAL_URL: "http://dealer-offer-web-portal:15072"
-      RABBIT_HOST: "rabbitmq"
+      RABBIT_HOST: "rabbitmq" # (dev- rbmqtest-01-msk.inner.alfaleasing.ru) (http://rbmqtest-01-msk.inner.alfaleasing.ru/)
       RABBIT_PORT: "5672"
-      RABBIT_USERNAME: "guest"
-      RABBIT_PASSWORD: "guest"
-      MINIO_ROOT_URL: http://minio:9000/ # (если хочешь идти на dev - https://storage.yandexcloud.net/)
+      RABBIT_USERNAME: "guest" # (dev- nosologub)
+      RABBIT_PASSWORD: "guest" # (dev- fuj53lWR816)
+      MINIO_ROOT_URL: http://minio:9000/ # (dev- https://storage.yandexcloud.net/)
       MINIO_BUCKET: svc-yc-car-search
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
     networks:
       - application-network
 
-#  dealer-offer-web-portal: # микросервис для работы с excel файлами
-#    image: nikitasologub/dealer-offer-web-portal:v0018
-#    container_name: dealer-offer-web-portal
-#    ports:
-#      - "15072:15072"
-#    networks:
-#      - application-network
-#
+  dealer-offer-web-portal: # микросервис для загрузки excel файлов
+    image: nikitasologub/dealer-offer-web-portal:v0019
+    container_name: dealer-offer-web-portal
+    ports:
+      - "15072:15072"
+    networks:
+      - application-network
+    environment:
+      DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
+
 #  avtomir-dealer-provider: # микросервис для похода на Автомир
 #    image: loverloser1804/custom-dealer-self-loading-provider:1.1
 #    container_name: avtomir-dealer-provider
@@ -64,7 +63,7 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_BUCKET: svc-yc-car-search  # retrobucket
+      MINIO_BUCKET: svc-yc-car-search
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
     networks:
