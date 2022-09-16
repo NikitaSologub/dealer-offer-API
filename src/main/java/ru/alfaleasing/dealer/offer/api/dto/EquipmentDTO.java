@@ -21,15 +21,15 @@ import javax.annotation.Nullable;
 public class EquipmentDTO {
 
     @ApiModelProperty(value = "Название дополнительного оборудования")
-    @JsonProperty("equipment_name")
-    String equipmentName;
+    @JsonProperty("name")
+    String name;
 
     @ApiModelProperty(value = "Стоимость дополнительного оборудования")
-    @JsonProperty("equipment_price")
+    @JsonProperty("price")
     @Nullable
-    String equipmentPrice;
+    String price;
 
     @ApiModelProperty(value = "Количество единиц дополнительного оборудования")
-    @JsonProperty("equipment_count")
-    private String equipmentCount;
+    @JsonProperty("count")
+    private String count;
 }
