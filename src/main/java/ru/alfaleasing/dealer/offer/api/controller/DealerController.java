@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * Контроллер для работы с дилерами
@@ -31,9 +30,13 @@ public class DealerController { // todo - перенести его в dealer-of
         @ApiResponse(code = 401, message = " cannot load the dealer's list"),
     })
     @PostMapping("/load/dealers")
-    public ResponseEntity<?> getOffersByApi(@ApiParam @RequestBody DealerDTO[] dealer){
+    public ResponseEntity<?> getOffersByApi(@ApiParam @RequestBody DealerDTO dealer) {
         log.info(LocalDateTime.now() + " request from postman to /v1/dealer/load");
-        System.out.println("dealer's array from postman = " + Arrays.toString(dealer));
+        System.out.println("dealer's array from postman = " + dealer);
+        // 1) Приходит контрагент из CRM (это фактически дилер)
+        // сохраняем его в бд
+        // 2) Создаём этому дилеру два типа конекшенов (API и FILE)
+        //Примечание - конекшен для EXTERNAL_API создаётся в ручную а LINK - не используем вовсе (пока что)
         return ResponseEntity.ok().build();
     }
 }

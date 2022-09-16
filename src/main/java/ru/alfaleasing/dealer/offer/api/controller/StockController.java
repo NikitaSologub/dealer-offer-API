@@ -39,11 +39,11 @@ public class StockController {
         @ApiResponse(code = 401, message = "cannot load car stock"),
     })
     @PostMapping(value = "/offers-by-api/new")
-    public ResponseEntity<?> loadStock(@RequestHeader(AUTHORIZATION) String token,
-                                       @RequestHeader(X_SOURCE) String source,  // FILE или EXTERNAL_API
-                                       @RequestHeader(X_SALON_UID) UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
-                                       @RequestHeader(X_CLIENT_ID) String clientId, // dschemeris - OAuth2
-                                       @RequestBody List<StockDTO> stock) {
+    public ResponseEntity<UUID> loadStock(@RequestHeader(AUTHORIZATION) String token,
+                                          @RequestHeader(X_SOURCE) String source,  // FILE или EXTERNAL_API
+                                          @RequestHeader(X_SALON_UID) UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                                          @RequestHeader(X_CLIENT_ID) String clientId, // dschemeris - OAuth2
+                                          @RequestBody List<StockDTO> stock) {
 
         log.info("clientId is {}", clientId);
 
@@ -52,9 +52,8 @@ public class StockController {
         } else if (Type.FILE.name().equals(source)) {
             log.info("Начинаем загрузку стоков по файлу из dealer-offer-web-portal");
         }
-        carService.loadStocksToMinioAndRabbit(stock, source, salonUid);
-
         return ResponseEntity
-            .ok().build();
+            .ok()
+            .body(carService.loadStocksToMinioAndRabbit(stock, source, salonUid));
     }
 }

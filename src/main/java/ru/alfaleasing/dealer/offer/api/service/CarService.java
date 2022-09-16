@@ -20,6 +20,7 @@ import java.util.UUID;
 @Transactional
 public class CarService {
 
+    private static final String JSON = ".json";
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
 
@@ -30,28 +31,39 @@ public class CarService {
      * @param methodType способ загрузки данных (FILE, API)
      * @param salonId UUID конкретного дилера
      */
-    public void loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId) {
+    public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId) {
         log.info("Попали в сервис и пытаемся положить стоки в Rabbit и minIO {}", stock);
-        System.out.println("methodType = " + methodType);
-        System.out.println("salonId = " + salonId);
-        String fileName = minIOService.writeFileToMinIO(stock, salonId);
+        log.info("methodType = {} salonId = {}", methodType, salonId);
 
-        log.info("Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
+        log.info("1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
         // 1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера
+        UUID taskUid = UUID.randomUUID();
+        String fileName = salonId + JSON;
+
         TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTaskUid(UUID.randomUUID());
+        taskDTO.setTaskUid(taskUid);
         taskDTO.setDealerUid(salonId);
         taskDTO.setDealerName("Автомир");
         taskDTO.setCity("Москва");
-//        taskDTO.setDealer(new Dealer(salonId,"Автомир"));
         taskDTO.setUsed(false);
         taskDTO.setS3ObjectName(fileName);
 
-        // 2) Записываем в RabbitMQ объект типа task
-        log.info("Записываем в RabbitMQ объект типа task");
+        log.info("1.1) Обновляем поле в БД (last_task_date) для объекта Connection и ставим туда дату создания таски (LocalDate.new())");
+        // 1.1) Обновляем поле в БД (last_task_date) для объекта Connection и ставим туда дату создания таски (LocalDate.new())
+
+        log.info("2) Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)");
+        // 2) Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)
+
+        log.info("3) Кладём этот объект в minIO с UUID таски (UUID taskUid = UUID.randomUUID();)");
+        // 3) Кладём этот объект в minIO с UUID таски (UUID taskUid = UUID.randomUUID();)
+        minIOService.writeFileToMinIO(stock, fileName);
+
+        // 4) Записываем в RabbitMQ объект типа task
+        log.info("4) Записываем в RabbitMQ объект типа task");
         queueProcessor.publishMessage(taskDTO);
 
-        log.info("Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)");
-        // 3) Записываем в базу данных объект типа task и ставим ему статус (типо в процессе)
+        log.info("5) Возвращаем UUID нашей созданной таски");
+        // 5) Возвращаем UUID нашей созданной таски
+        return taskUid;
     }
 }

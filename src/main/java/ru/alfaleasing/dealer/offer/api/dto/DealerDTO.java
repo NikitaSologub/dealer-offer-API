@@ -14,27 +14,27 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ApiModel(description = "Dto c валидной информацией о дилере")
+@ApiModel(description = "Dto c валидной информацией о контрагенте")
 public class DealerDTO {
-
-    @ApiModelProperty(value = "Наименование дилера", required = true)
-    String dealer;
 
     @ApiModelProperty(value = "Уникальный идентификатор дилера", required = true)
     String uid;
 
-    @ApiModelProperty(value = "Регион", required = true)
+    @ApiModelProperty(value = "Наименование дилера", required = true)
+    String dealer;
+
+    @ApiModelProperty(value = "ИНН (идентификационный номер налогоплательщика)", required = true)
+    String inn;
+
+    @ApiModelProperty(value = "КПП (код причины постановки)", required = true)
+    String kpp;
+
+    @ApiModelProperty(value = "Код региона", required = true)
     String region;
 
     @ApiModelProperty(value = "Город")
     String city;
 
-    @ApiModelProperty(value = "Адрес")
+    @ApiModelProperty(value = "Адрес - в базе данных - location")
     String address;
-
-    @ApiModelProperty(value = "ИНН", required = true)
-    String inn;
-
-    @ApiModelProperty(value = "КПП", required = true)
-    String kpp;
 }

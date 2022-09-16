@@ -34,6 +34,7 @@ public class TaskDTO {
     @JsonProperty("is_used")
     boolean isUsed;
 
+    // название это UUID таски + .json
     @JsonProperty("s3_object_name")
     String s3ObjectName;
 }

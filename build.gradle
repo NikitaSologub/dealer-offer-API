@@ -32,6 +32,7 @@ ext {
 dependencies {
 //    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     compile "org.springframework.boot:spring-boot-starter-web"
+    implementation 'org.springframework.data:spring-data-jpa'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit"
     implementation "io.minio:minio:${minIOVersion}"
