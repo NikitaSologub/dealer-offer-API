@@ -14,21 +14,25 @@ spring:
         bindings:
           dealer-car-stock:
             producer:
-              routingKeyExpression: "'new-offers-list.event.create'"
-
-#            consumer:
-#              exchangeType: direct
-#              bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
-#              bindingRoutingKeyDelimiter: ","
-#              bindQueue: true
+              exchangeType: direct
+              routing-key-expression: "'new-offers-list.event.create'"
+#              routingKeyExpression: "'new-offers-list.event.create'"
               queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
           dealer-car-stock-reading:
             consumer:
-              bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
+              exchangeType: direct
+#              exchangeType: direct
+#              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
+#              binding-routing-key: "new-offers-list.event.create"
+#                        bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
               bindingRoutingKeyDelimiter: ","
               bindQueue: true
               queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
-
+          c_sharp_exchange:
+            consumer:
+              exchangeType: direct
+              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
+              binding-routing-key: "task-status.from.c-sharp.read"
       bindings:
         dealer-car-stock:
           destination: dealer_offer_api
@@ -37,6 +41,10 @@ spring:
         dealer-car-stock-reading:
           destination: dealer_offer_api.to.stock-service.new-offers-list
           group: to.stock-service.new-offers-list
+          binder: rabbit
+        c_sharp_exchange:
+          destination: c_sharp_exchange
+          group: c-sharp-queue
           binder: rabbit
       binders:
         rabbit:
