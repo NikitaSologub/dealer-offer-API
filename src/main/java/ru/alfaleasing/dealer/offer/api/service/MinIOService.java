@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.util.UUID;
 
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
@@ -25,7 +24,6 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 @Transactional
 public class MinIOService {
 
-    private static final String JSON = ".json";
     private final ObjectMapper objectMapper;
     private final MinioClient minioClient;
 
@@ -38,8 +36,7 @@ public class MinIOService {
      * @param response объект стоков валидных и не валидных автомобилей который будет записан в minIO в формате JSON
      */
     @SneakyThrows
-    public String writeFileToMinIO(Object response, UUID salonId) {
-        String filename = salonId + JSON;
+    public void writeFileToMinIO(Object response, String filename) {
         try {
             createBucketIfNotExists();
 
@@ -56,9 +53,7 @@ public class MinIOService {
             log.info("{} successfully uploaded to: container: {}   blob: {}", filename, bucketName, filename);
         } catch (MinioException e) {
             log.info("Error occurred: " + e);
-            return "FILE_IS_NOT_WRITTEN_TO_MINIO_BUCKET";
         }
-        return filename;
     }
 
     /**
