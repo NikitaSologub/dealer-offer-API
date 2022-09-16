@@ -12,34 +12,18 @@ spring:
     stream:
       rabbit:
         bindings:
-          dealer-car-stock:
+          dealer_offer_api:
             producer:
               exchangeType: direct
               routing-key-expression: "'new-offers-list.event.create'"
-#              routingKeyExpression: "'new-offers-list.event.create'"
-              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
-          dealer-car-stock-reading:
-            consumer:
-              exchangeType: direct
-#              exchangeType: direct
-#              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
-#              binding-routing-key: "new-offers-list.event.create"
-#                        bindingRoutingKey: "new-offers-list.event.create" # Какие из RoutingKey (через запятую) использовать для связывания
-              bindingRoutingKeyDelimiter: ","
-              bindQueue: true
-              queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
           c_sharp_exchange:
             consumer:
               exchangeType: direct
               queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
               binding-routing-key: "task-status.from.c-sharp.read"
       bindings:
-        dealer-car-stock:
+        dealer_offer_api:
           destination: dealer_offer_api
-          group: to.stock-service.new-offers-list
-          binder: rabbit
-        dealer-car-stock-reading:
-          destination: dealer_offer_api.to.stock-service.new-offers-list
           group: to.stock-service.new-offers-list
           binder: rabbit
         c_sharp_exchange:
