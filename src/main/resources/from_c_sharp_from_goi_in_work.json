@@ -1,0 +1,15 @@
+{
+  "task_uid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "IN_WORK",
+  "results": [
+    {
+      "vin": "XW8ZZZ16ZGN902558"
+    },
+    {
+      "vin": "EW8ZNZ16ZGN902558"
+    },
+    {
+      "vin": "TW8ZZC16ZGN902558"
+    }
+  ]
+}

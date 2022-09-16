@@ -103,7 +103,7 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Код цвета кузова от производителя")
     @JsonProperty("color_code")
-    BigInteger colorCode;
+    String colorCode;
 
     @ApiModelProperty(value = "Код цвета обшивки салона")
     @JsonProperty("interior_color_code")
