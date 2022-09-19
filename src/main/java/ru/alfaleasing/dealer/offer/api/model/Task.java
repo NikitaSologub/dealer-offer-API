@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
-import ru.alfaleasing.dealer.offer.api.dto.TaskResponseFromCSharpSystemDTO;
+import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +51,7 @@ public class Task {
     TaskStatus status;
     boolean isUsed;
     @Type(type = "jsonb")
-    TaskResponseFromCSharpSystemDTO taskResult; // jsonb
+    ProcessedTaskResponseDTO taskResult; // jsonb
     Integer offersReceived;
     Integer offersPublished;
 }

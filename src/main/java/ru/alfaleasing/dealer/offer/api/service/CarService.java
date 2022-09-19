@@ -42,6 +42,7 @@ public class CarService {
      * @param methodType способ загрузки данных (FILE, API, EXTERNAL_API, LINK)
      * @param salonId    UUID конкретного дилера
      */
+    @Transactional(rollbackForClassName = {"Exception"})
     public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId, String clientId) {
         log.info("methodType = {} salonId = {}  clientId = {}", methodType, salonId, clientId);
         LocalDateTime now = LocalDateTime.now();

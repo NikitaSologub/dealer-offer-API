@@ -8,12 +8,17 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alfaleasing.dealer.offer.api.dto.TaskResponseFromCSharpSystemDTO;
-import ru.alfaleasing.dealer.offer.api.dto.status.Status;
+import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
+import ru.alfaleasing.dealer.offer.api.dto.StockStatusInfoDTO;
+import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
+import ru.alfaleasing.dealer.offer.api.model.Task;
+import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
 import ru.alfaleasing.dealer.offer.api.stream.QueueReceiver;
 import ru.alfaleasing.dealer.offer.api.stream.QueueSender;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class QueueProcessor {
     public static final String PUBLISHED = "published";
     private final QueueSender queueSender;
     private final ObjectMapper objectMapper;
+    private final TaskRepository taskRepository;
 
     /**
      * Для отправки сообщений в очередь
@@ -40,43 +46,64 @@ public class QueueProcessor {
      * Для получения сообщений из С# системы
      */
     @StreamListener(QueueReceiver.C_SHARP_EXCHANGE)
+    @Transactional
     public void receiverFromCSharpSystem(String message) {
         log.info("Принимаем из C# систем статусы и сохраняем результаты в БД");
         log.info("message = {}", message);
         try {
-            TaskResponseFromCSharpSystemDTO task = objectMapper.readValue(message, TaskResponseFromCSharpSystemDTO.class);
-            log.info("task = {}", task);
+            ProcessedTaskResponseDTO aggregationServerResponse = objectMapper.readValue(message, ProcessedTaskResponseDTO.class);
+            log.info("0.1. Пришёл запрос из C# систем aggregationServerResponse = {}", aggregationServerResponse);
 
+            Task taskFromDb = taskRepository.getTaskByUid(aggregationServerResponse.getTaskUid());
+            if (taskFromDb == null) {
+                log.info("0.3. Из из C# систем пришёл запрос на изменение статуса task с uuid которого не существует в базе");
+                return;
+            }
 
-            //1. если пришёл статус IN_WORK
-            if (Status.IN_WORK.equals(task.getStatus())) {
-                // 1.1 Смотрим сколько автомобилей содержат vin в массиве (все эти машины будут проходить проверку ГОИ)
-                log.info("Попали в блок IN_WORK");
-                long publishedCarsCount = task.getResults().stream()
+            TaskStatus currentStatus = aggregationServerResponse.getStatus();
+            log.info("0.4. Смотрим статус Task из C# систем. TaskStatus = {}", currentStatus);
+
+            if (TaskStatus.IN_WORK.equals(currentStatus)) {
+                log.info("1.0. Попали в блок IN_WORK Смотрим сколько автомобилей содержат vin в массиве (все эти машины прошли проверку ГОИ)");
+
+                log.info("1.1. Смотрим сколько автомобилей содержат vin != null (они прошли проверку ГОИ)");
+                long carsMappedByGoiCount = aggregationServerResponse.getResults().stream()
                     .filter(car -> Objects.nonNull(car.getVin()))
                     .count();
 
-                //1.2 Достаём из БД объект типа Task и изменяем ему Status, кол-во опубликованных машин и записываем jsonb как весь наш файл
+                log.info("1.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, carsMappedByGoiCount);
+                taskFromDb.setStatus(currentStatus);
+                taskFromDb.setOffersPublished(Math.toIntExact(carsMappedByGoiCount));
+                taskFromDb.setTaskResult(aggregationServerResponse);//todo - сохранять еще весь объект в jsonb
+                Task changedTask = taskRepository.save(taskFromDb);
+                log.info("1.3 Объект Task обновлён в БД  task ={}", changedTask);
+            } else if (TaskStatus.DONE.equals(currentStatus) || TaskStatus.FAIL.equals(currentStatus)) {
+                log.info("2.0. Попали в блок DONE и FAIL");
 
-            } else if (Status.DONE.equals(task.getStatus()) || Status.FAILED.equals(task.getStatus())) {
-                //2. если пришли статусы DONE и FAILED
-                log.info("Попали в блок DONE и FAILED");
-
-                // 2.1 Смотрим сколько автомобилей опубликовано
-                long publishedCarsCount = task.getResults().stream()
+                log.info("2.1. Смотрим сколько автомобилей содержат status='published' (они прошли проверку ГОИ и КЛИ)");
+                long publishedCars = aggregationServerResponse.getResults().stream()
+                    .filter(car -> Objects.nonNull(car.getVin()))
                     .filter(a -> PUBLISHED.equals(a.getStatus()))
                     .count();
 
-                //2.2 Достаём из БД объект типа Task и изменяем ему Status, кол-во опубликованных машин и записываем jsonb как весь наш файл
+                log.info("2.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, publishedCars);
+                taskFromDb.setStatus(currentStatus);
+                taskFromDb.setOffersPublished(Math.toIntExact(publishedCars));
+                taskFromDb.setTaskResult(aggregationServerResponse);//todo - сохранять еще весь объект в jsonb
+                Task changedTask = taskRepository.save(taskFromDb);
+                log.info("2.3 Объект Task обновлён в БД  task ={}", changedTask);
 
+                log.info("2.4 Все не опубликованные автомобили в ГОИ и КЛИ пишем а лог.");
+                List<StockStatusInfoDTO> notPublishedCars = aggregationServerResponse.getResults().stream()
+                    .filter(a -> !PUBLISHED.equals(a.getStatus()))
+                    .collect(Collectors.toList());
+                log.info("NOT PUBLISHED CARS BY SOME REASON = {}", notPublishedCars);
             } else {
-                //3. если пришёл левый статус - хз что делать
-                log.info("Попали в блок ERROR");
-                log.info("Из системы пришёл странный статус - хз чо с ним делать");
+                log.info("3.0 Попали в блок ERROR. Из системы пришёл странный статус - не известно что с ним делать");
             }
 
         } catch (JsonProcessingException e) {
-            log.info("Не удалось разобрать тело запроса из Json в объект TaskResponseFromCSharpSystem");
+            log.info("0.2. Не удалось разобрать тело запроса из Json в объект TaskResponseFromCSharpSystemDTO");
         }
     }
 }

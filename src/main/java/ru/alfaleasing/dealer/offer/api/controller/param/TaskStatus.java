@@ -1,5 +1,22 @@
 package ru.alfaleasing.dealer.offer.api.controller.param;
 
+/**
+ * Статусы обработки объекта типа Task в системах ГОИ и КЛИ
+ */
 public enum TaskStatus {
-    IN_WORK, DONE, FAIL
+
+    /**
+     * task в процессе обработки
+     */
+    IN_WORK,
+
+    /**
+     * Обработка task была завершена успешно
+     */
+    DONE,
+
+    /**
+     * Обработка task была завершена неудачно
+     */
+    FAIL
 }
