@@ -1,5 +1,5 @@
 package ru.alfaleasing.dealer.offer.api.controller.param;
 
-public enum Type {
-    FILE, EXTERNAL_API
+public enum LoadingType {
+    API, LINK, FILE, EXTERNAL_API
 }

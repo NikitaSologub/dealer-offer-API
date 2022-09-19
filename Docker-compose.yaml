@@ -1,7 +1,9 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-    image: nikitasologub/dealer-offer-api:v0028
+#    image: nikitasologub/dealer-offer-api:v0028
+    image: api
+    build: .
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -17,6 +19,10 @@ services:
       MINIO_BUCKET: svc-yc-car-search
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
+      DRIVER_CLASS_NAME: org.postgresql.Driver
+      URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
+      USERNAME: car_search_platform_db_user
+      PASSWORD: FP8VCNJ8gvU7YzGi
     networks:
       - application-network
 
