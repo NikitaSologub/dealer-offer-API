@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alfaleasing.dealer.offer.api.controller.param.Type;
+import ru.alfaleasing.dealer.offer.api.controller.param.LoadingType;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.service.CarService;
 
@@ -47,13 +47,13 @@ public class StockController {
 
         log.info("clientId is {}", clientId);
 
-        if (source == null || Type.EXTERNAL_API.name().equals(source)) {
+        if (source == null || LoadingType.EXTERNAL_API.name().equals(source)) {
             log.info("Начинаем загрузку стоков по API из Automir");
-        } else if (Type.FILE.name().equals(source)) {
+        } else if (LoadingType.FILE.name().equals(source)) {
             log.info("Начинаем загрузку стоков по файлу из dealer-offer-web-portal");
         }
         return ResponseEntity
             .ok()
-            .body(carService.loadStocksToMinioAndRabbit(stock, source, salonUid));
+            .body(carService.loadStocksToMinioAndRabbit(stock, source, salonUid, clientId));
     }
 }
