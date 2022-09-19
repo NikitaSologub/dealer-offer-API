@@ -22,7 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -44,7 +44,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "dealer_id")
     Dealer dealer;
-    LocalDate createDate;
+    LocalDateTime createDate;
     String author;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

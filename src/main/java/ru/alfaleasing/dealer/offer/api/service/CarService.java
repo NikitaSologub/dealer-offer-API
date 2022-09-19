@@ -15,7 +15,7 @@ import ru.alfaleasing.dealer.offer.api.repository.DealerRepository;
 import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
 import ru.alfaleasing.dealer.offer.api.stream.processor.QueueProcessor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +44,7 @@ public class CarService {
      */
     public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId, String clientId) {
         log.info("methodType = {} salonId = {}  clientId = {}", methodType, salonId, clientId);
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
 
         log.info("1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
         Dealer dealer = dealerRepository.getDealerByUid(salonId); //3fa85f64-5717-4562-b3fc-2c963f66afa6 - avtomir
