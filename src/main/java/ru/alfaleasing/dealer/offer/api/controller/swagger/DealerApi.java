@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
+import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 
 import java.util.List;
 
@@ -33,6 +34,6 @@ public interface DealerApi {
         @ApiResponse(code = 401, message = " cannot get list of dealers"),
     })
     @PostMapping("/dealers")
-    ResponseEntity<List<DealerDTO>> getDealers(@RequestHeader(AUTHORIZATION) String token,
-                                               @RequestHeader(X_CLIENT_ID) String clientId);
+    ResponseEntity<List<DealerInDbDTO>> getDealers(@RequestHeader(AUTHORIZATION) String token,
+                                                   @RequestHeader(X_CLIENT_ID) String clientId);
 }

@@ -1,9 +1,9 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-#    image: nikitasologub/dealer-offer-api:v0028
-    image: api
-    build: .
+    image: nikitasologub/dealer-offer-api:v0030
+#    image: api
+#    build: .
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
@@ -36,15 +36,15 @@ services:
     environment:
       DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
 
-#  avtomir-dealer-provider: # микросервис для похода на Автомир
-#    image: avtomir
-#    container_name: avtomir-self-loading-provider
-#    ports:
-#      - "18420:18420"
-#    environment:
-#      DEALER_OFFER_HOST: "http://dealer-offer-api:15073"
-#    networks:
-#      - application-network
+  avtomir-dealer-provider: # микросервис для похода на Автомир
+    image: avtomir
+    container_name: avtomir-self-loading-provider
+    ports:
+      - "9079:9079"
+    environment:
+      DEALER_OFFER_HOST: "http://dealer-offer-api:15073"
+    networks:
+      - application-network
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management
