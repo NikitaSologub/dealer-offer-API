@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.api.model;
+package ru.alfaleasing.dealer.offer.api.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,16 +22,17 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "dealers")
-public class Dealer {
+public class Dealer implements BaseEntity<Long> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     UUID uid;
     String name;
     String region;
     String inn;
     String kpp;
-    LocalDate createDate;
+    LocalDateTime createDate;
     String createAuthor;
     Boolean isDeleted;
 }

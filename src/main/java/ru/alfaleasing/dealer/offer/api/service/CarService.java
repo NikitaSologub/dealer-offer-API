@@ -7,15 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
-import ru.alfaleasing.dealer.offer.api.model.Connection;
-import ru.alfaleasing.dealer.offer.api.model.Dealer;
-import ru.alfaleasing.dealer.offer.api.model.Task;
+import ru.alfaleasing.dealer.offer.api.entity.Connection;
+import ru.alfaleasing.dealer.offer.api.entity.Dealer;
+import ru.alfaleasing.dealer.offer.api.entity.Task;
 import ru.alfaleasing.dealer.offer.api.repository.ConnectionRepository;
 import ru.alfaleasing.dealer.offer.api.repository.DealerRepository;
 import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
 import ru.alfaleasing.dealer.offer.api.stream.processor.QueueProcessor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,9 +42,10 @@ public class CarService {
      * @param methodType способ загрузки данных (FILE, API, EXTERNAL_API, LINK)
      * @param salonId    UUID конкретного дилера
      */
+    @Transactional(rollbackForClassName = {"Exception"})
     public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId, String clientId) {
         log.info("methodType = {} salonId = {}  clientId = {}", methodType, salonId, clientId);
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
 
         log.info("1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
         Dealer dealer = dealerRepository.getDealerByUid(salonId); //3fa85f64-5717-4562-b3fc-2c963f66afa6 - avtomir

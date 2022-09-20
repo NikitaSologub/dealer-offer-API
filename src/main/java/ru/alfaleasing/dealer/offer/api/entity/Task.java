@@ -1,6 +1,5 @@
-package ru.alfaleasing.dealer.offer.api.model;
+package ru.alfaleasing.dealer.offer.api.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
-import ru.alfaleasing.dealer.offer.api.dto.TaskResponseFromCSharpSystemDTO;
+import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -32,11 +30,11 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "tasks")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class Task {
+public class Task implements BaseEntity<Long> {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     UUID uid;
     @ManyToOne
     @JoinColumn(name = "connection_id")
@@ -44,14 +42,14 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "dealer_id")
     Dealer dealer;
-    LocalDate createDate;
+    LocalDateTime createDate;
     String author;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     TaskStatus status;
     boolean isUsed;
     @Type(type = "jsonb")
-    TaskResponseFromCSharpSystemDTO taskResult; // jsonb
+    ProcessedTaskResponseDTO taskResult; // jsonb
     Integer offersReceived;
     Integer offersPublished;
 }

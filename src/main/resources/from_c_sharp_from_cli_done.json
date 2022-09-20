@@ -1,21 +1,31 @@
 {
-  "task_uid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "task_uid": "794fac06-4807-4841-aeff-ac047818dde0",
   "status": "DONE",
   "results": [
     {
-      "vin": "XW8ZZZ16ZGN902558",
-      "status": "mapping_failed",
-      "description": "ТС не было опубликовано - не удалось смапить модель с КЛИ"
-    },
-    {
-      "vin": "EW8ZNZ16ZGN902558",
+      "vin": "XW8ZZZ16ZGN902502",
       "status": "published",
       "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
     },
     {
-      "vin": "TW8ZZC16ZGN902558",
-      "status": "goi_decliend",
-      "description": "ТС не было опубликовано - проверка ГОИ не пройдена"
+      "vin": "XW8ZZZ16ZGN902503",
+      "status": "failed",
+      "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
+    },
+    {
+      "vin": "XW8ZZZ16ZGN902504",
+      "status": "published",
+      "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
+    },
+    {
+      "vin": "XW8ZZZ16ZGN902505",
+      "status": "failed",
+      "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
+    },
+    {
+      "vin": "XW8ZZZ16ZGN902506",
+      "status": "published",
+      "description": "ТС было проверено ГОИ и опубликовано в КЛИ"
     }
   ]
 }

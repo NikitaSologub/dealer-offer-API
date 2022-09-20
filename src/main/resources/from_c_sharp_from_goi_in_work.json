@@ -1,15 +1,21 @@
 {
-  "task_uid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "task_uid": "07850bb7-5a10-47b3-9cbb-2acb80589c12",
   "status": "IN_WORK",
   "results": [
     {
-      "vin": "XW8ZZZ16ZGN902558"
+      "vin": "XW8ZZZ16ZGN902502"
     },
     {
-      "vin": "EW8ZNZ16ZGN902558"
+      "vin": "XW8ZZZ16ZGN902503"
     },
     {
-      "vin": "TW8ZZC16ZGN902558"
+      "vin": "XW8ZZZ16ZGN902504"
+    },
+    {
+      "vin": "XW8ZZZ16ZGN902505"
+    },
+    {
+      "vin": "XW8ZZZ16ZGN902506"
     }
   ]
 }

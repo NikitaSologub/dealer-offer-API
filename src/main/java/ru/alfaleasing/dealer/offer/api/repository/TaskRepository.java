@@ -1,7 +1,7 @@
 package ru.alfaleasing.dealer.offer.api.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.alfaleasing.dealer.offer.api.model.Task;
+import ru.alfaleasing.dealer.offer.api.entity.Task;
 
 import java.util.UUID;
 
