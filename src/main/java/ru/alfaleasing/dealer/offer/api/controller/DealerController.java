@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.alfaleasing.dealer.offer.api.controller.swagger.DealerApi;
 import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
+import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 import ru.alfaleasing.dealer.offer.api.service.DealerService;
 
 import java.time.LocalDateTime;
@@ -45,9 +46,9 @@ public class DealerController implements DealerApi {
     }
 
     @GetMapping("/dealers")
-    public ResponseEntity<List<DealerDTO>> getDealers(@RequestHeader(AUTHORIZATION) String token,
-                                                      @RequestHeader(X_CLIENT_ID) String clientId) {
-        List<DealerDTO> dealers = dealerService.getAllDealers();
+    public ResponseEntity<List<DealerInDbDTO>> getDealers(@RequestHeader(AUTHORIZATION) String token,
+                                                          @RequestHeader(X_CLIENT_ID) String clientId) {
+        List<DealerInDbDTO> dealers = dealerService.getAllDealers();
         log.info("Вернули список всех дилеров {}", dealers);
         return ResponseEntity
             .ok()

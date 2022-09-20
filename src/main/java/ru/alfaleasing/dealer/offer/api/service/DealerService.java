@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
+import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 import ru.alfaleasing.dealer.offer.api.repository.DealerRepository;
 
 import java.util.List;
@@ -22,16 +22,20 @@ public class DealerService {
 
     private final DealerRepository dealerRepository;
 
-    public List<DealerDTO> getAllDealers() {
+    /**
+     * Вернуть всех контрагентов из БД
+     */
+    public List<DealerInDbDTO> getAllDealers() {
         return dealerRepository.findAll().stream()
-            .map(dealer -> DealerDTO.builder()
+            .map(dealer -> DealerInDbDTO.builder()
                 .uid(dealer.getUid().toString())
                 .dealer(dealer.getName())
-                .city(null)
                 .inn(dealer.getInn())
                 .kpp(dealer.getKpp())
                 .region(dealer.getRegion())
-                .address(null)
+                .createDate(dealer.getCreateDate())
+                .createAuthor(dealer.getCreateAuthor())
+                .isDeleted(dealer.getIsDeleted())
                 .build())
             .collect(toList());
     }
