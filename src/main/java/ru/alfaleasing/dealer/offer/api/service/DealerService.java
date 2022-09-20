@@ -49,7 +49,6 @@ public class DealerService {
                         .filter(conn -> conn.getLastTaskDate() != null)
                         .sorted(Comparator.comparing(Connection::getLastTaskDate).reversed())
                         .map(Connection::getLastTaskDate)
-                        .peek(some -> System.out.println("some_thing" + some))
                         .map(LocalDateTime::toString)
                         .findFirst().orElse(null)
                 )
