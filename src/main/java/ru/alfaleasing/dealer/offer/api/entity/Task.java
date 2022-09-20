@@ -1,6 +1,5 @@
-package ru.alfaleasing.dealer.offer.api.model;
+package ru.alfaleasing.dealer.offer.api.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
 import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
 
@@ -32,11 +30,11 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "tasks")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class Task {
+public class Task implements BaseEntity<Long> {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     UUID uid;
     @ManyToOne
     @JoinColumn(name = "connection_id")

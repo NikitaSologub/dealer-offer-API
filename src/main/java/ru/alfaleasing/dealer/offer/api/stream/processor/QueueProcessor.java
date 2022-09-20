@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
 import ru.alfaleasing.dealer.offer.api.dto.StockStatusInfoDTO;
 import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
-import ru.alfaleasing.dealer.offer.api.model.Task;
+import ru.alfaleasing.dealer.offer.api.entity.Task;
 import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
 import ru.alfaleasing.dealer.offer.api.stream.QueueReceiver;
 import ru.alfaleasing.dealer.offer.api.stream.QueueSender;
@@ -74,7 +74,7 @@ public class QueueProcessor {
                 log.info("1.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, carsMappedByGoiCount);
                 taskFromDb.setStatus(currentStatus);
                 taskFromDb.setOffersPublished(Math.toIntExact(carsMappedByGoiCount));
-                taskFromDb.setTaskResult(aggregationServerResponse);//todo - сохранять еще весь объект в jsonb
+                taskFromDb.setTaskResult(aggregationServerResponse);
                 Task changedTask = taskRepository.save(taskFromDb);
                 log.info("1.3 Объект Task обновлён в БД  task ={}", changedTask);
             } else if (TaskStatus.DONE.equals(currentStatus) || TaskStatus.FAIL.equals(currentStatus)) {
@@ -89,7 +89,7 @@ public class QueueProcessor {
                 log.info("2.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, publishedCars);
                 taskFromDb.setStatus(currentStatus);
                 taskFromDb.setOffersPublished(Math.toIntExact(publishedCars));
-                taskFromDb.setTaskResult(aggregationServerResponse);//todo - сохранять еще весь объект в jsonb
+                taskFromDb.setTaskResult(aggregationServerResponse);
                 Task changedTask = taskRepository.save(taskFromDb);
                 log.info("2.3 Объект Task обновлён в БД  task ={}", changedTask);
 
