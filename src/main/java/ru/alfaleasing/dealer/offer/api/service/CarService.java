@@ -39,7 +39,7 @@ public class CarService {
      * Метод используется для загрузки стоков и помещения их в minIO и отправки объекта в RabbitMQ
      *
      * @param stock      данные о автомобилях которые нужно загрузить
-     * @param methodType способ загрузки данных (FILE, API, EXTERNAL_API, LINK)
+     * @param methodType способ загрузки данных (FILE, API)
      * @param salonId    UUID конкретного дилера
      */
     @Transactional(rollbackForClassName = {"Exception"})
@@ -50,7 +50,7 @@ public class CarService {
         log.info("1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
         Dealer dealer = dealerRepository.getDealerByUid(salonId); //3fa85f64-5717-4562-b3fc-2c963f66afa6 - avtomir
 
-        if (methodType != null && dealer != null) {
+        if (dealer != null) {
             Connection currentConnection = connectionRepository.getConnectionsByDealer(dealer).stream()
                 .filter(conn -> methodType.equalsIgnoreCase(conn.getType().toString()))
                 .findFirst()
@@ -97,7 +97,7 @@ public class CarService {
             return taskInDb.getUid();
 
         } else {
-            throw new IllegalArgumentException("methodType не определён или не валиден");
+            throw new IllegalArgumentException("dealer = null - формат данных не совпадает");
         }
     }
 }

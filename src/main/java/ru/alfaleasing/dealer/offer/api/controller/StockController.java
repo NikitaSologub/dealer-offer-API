@@ -33,19 +33,19 @@ public class StockController implements StockApi {
 
     @PostMapping(value = "/offers-by-api/new")
     public ResponseEntity<UUID> loadStock(@RequestHeader(AUTHORIZATION) String token,
-                                          @RequestHeader(value = X_SOURCE, required = false) String source,
+                                          @RequestHeader(X_SOURCE) String source,
                                           @RequestHeader(X_SALON_UID) UUID salonUid, // 3fa85f64-5717-4562-b3fc-2c963f66afa6
                                           @RequestHeader(X_CLIENT_ID) String clientId,
                                           @RequestBody List<StockDTO> stock) {
 
         log.info("Request with headers: clientId is {} source is {} clientId is {} salonUid is {}", clientId, source, clientId, salonUid);
 
-        if (source == null || LoadingType.EXTERNAL_API.name().equals(source)) {
-            log.info("Начинаем загрузку стоков по API из Automir");
-        } else if (LoadingType.FILE.name().equals(source)) {
+        if (LoadingType.FILE.name().equals(source)) {
             log.info("Начинаем загрузку стоков по файлу из dealer-offer-web-portal");
         } else if (LoadingType.API.name().equals(source)) {
-            log.info("Начинаем загрузку стоков прямо по api dealer-offer-api");
+            log.info("Начинаем загрузку стоков из Automir");
+        } else {
+            throw new IllegalArgumentException("X_SOURCE не ни FILE ни API");
         }
         return ResponseEntity
             .ok()
