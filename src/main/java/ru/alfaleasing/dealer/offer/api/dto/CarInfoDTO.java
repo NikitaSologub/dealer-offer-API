@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiModel(description = "Информация о стоке при прохождении систем ГОИ и КЛИ")
-public class StockStatusInfoDTO {
+public class CarInfoDTO {
 
     @ApiModelProperty(value = "vin")
     @JsonProperty("vin")

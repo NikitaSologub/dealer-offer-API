@@ -9,8 +9,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
-import ru.alfaleasing.dealer.offer.api.dto.StockStatusInfoDTO;
-import ru.alfaleasing.dealer.offer.api.dto.ProcessedTaskResponseDTO;
+import ru.alfaleasing.dealer.offer.api.dto.CarInfoDTO;
+import ru.alfaleasing.dealer.offer.api.dto.TaskResultDTO;
 import ru.alfaleasing.dealer.offer.api.entity.Task;
 import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
 import ru.alfaleasing.dealer.offer.api.stream.QueueReceiver;
@@ -51,7 +51,7 @@ public class QueueProcessor {
         log.info("Принимаем из C# систем статусы и сохраняем результаты в БД");
         log.info("message = {}", message);
         try {
-            ProcessedTaskResponseDTO aggregationServerResponse = objectMapper.readValue(message, ProcessedTaskResponseDTO.class);
+            TaskResultDTO aggregationServerResponse = objectMapper.readValue(message, TaskResultDTO.class);
             log.info("0.1. Пришёл запрос из C# систем aggregationServerResponse = {}", aggregationServerResponse);
 
             Task taskFromDb = taskRepository.getTaskByUid(aggregationServerResponse.getTaskUid());
@@ -94,7 +94,7 @@ public class QueueProcessor {
                 log.info("2.3 Объект Task обновлён в БД  task ={}", changedTask);
 
                 log.info("2.4 Все не опубликованные автомобили в ГОИ и КЛИ пишем а лог.");
-                List<StockStatusInfoDTO> notPublishedCars = aggregationServerResponse.getResults().stream()
+                List<CarInfoDTO> notPublishedCars = aggregationServerResponse.getResults().stream()
                     .filter(a -> !PUBLISHED.equals(a.getStatus()))
                     .collect(Collectors.toList());
                 log.info("NOT PUBLISHED CARS BY SOME REASON = {}", notPublishedCars);

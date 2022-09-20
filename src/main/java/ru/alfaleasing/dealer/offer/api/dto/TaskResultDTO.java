@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiModel(description = "Информация о таске при прохождении систем ГОИ и КЛИ со всеми стоками")
-public class ProcessedTaskResponseDTO {
+public class TaskResultDTO {
 
     @ApiModelProperty(value = "UUID задачи по проверке стоков в системах ГОИ и КЛИ")
     @JsonProperty("task_uid")
@@ -32,5 +32,5 @@ public class ProcessedTaskResponseDTO {
 
     @ApiModelProperty(value = "Список автомобилей с их конкретными статусами после прохождения систем ГОИ и КЛИ")
     @JsonProperty("results")
-    List<StockStatusInfoDTO> results;
+    List<CarInfoDTO> results;
 }

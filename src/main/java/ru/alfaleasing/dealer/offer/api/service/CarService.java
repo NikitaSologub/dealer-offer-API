@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
+import ru.alfaleasing.dealer.offer.api.dto.CarInfoDTO;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
+import ru.alfaleasing.dealer.offer.api.dto.TaskResultDTO;
 import ru.alfaleasing.dealer.offer.api.entity.Connection;
 import ru.alfaleasing.dealer.offer.api.entity.Dealer;
 import ru.alfaleasing.dealer.offer.api.entity.Task;
@@ -19,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Сервис для работы с документами автомобилей
  */
@@ -28,6 +32,7 @@ import java.util.UUID;
 @Transactional
 public class CarService {
 
+    private static final String BEFORE_GOI_AND_CLI = "before_goi_and_cli";
     private static final String JSON = ".json";
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
@@ -56,8 +61,10 @@ public class CarService {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
 
+            UUID taskUid = UUID.randomUUID();
+
             Task task = Task.builder()
-                .uid(UUID.randomUUID())
+                .uid(taskUid)
                 .connection(currentConnection)
                 .dealer(dealer)
                 .createDate(now)
@@ -65,6 +72,16 @@ public class CarService {
                 .status(TaskStatus.IN_WORK)
                 .isUsed(false)
                 .offersReceived(stock.size())
+                .taskResult(TaskResultDTO.builder()
+                    .taskUid(taskUid)
+                    .status(TaskStatus.IN_WORK)
+                    .results(stock.stream()
+                        .map(car -> CarInfoDTO.builder()
+                            .vin(car.getVin())
+                            .status(BEFORE_GOI_AND_CLI)
+                            .build())
+                        .collect(toList()))
+                    .build())
                 .offersPublished(0)
                 .build();
 

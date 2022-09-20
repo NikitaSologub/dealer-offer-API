@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,6 +38,6 @@ public class DealerInDbDTO {
     @ApiModelProperty(value = "Автор занесения контрагента в базу")
     String createAuthor;
 
-    @ApiModelProperty(value = "Последняя дата внесения данных по любому Connection для этого контрагенту")
+    @ApiModelProperty(value = "Последняя дата внесения данных по любому Connection для этого контрагента")
     String lastUpdated;
 }
