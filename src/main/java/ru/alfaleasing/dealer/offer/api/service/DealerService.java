@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
+import ru.alfaleasing.dealer.offer.api.entity.Connection;
+import ru.alfaleasing.dealer.offer.api.repository.ConnectionRepository;
 import ru.alfaleasing.dealer.offer.api.repository.DealerRepository;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -21,11 +25,15 @@ import static java.util.stream.Collectors.toList;
 public class DealerService {
 
     private final DealerRepository dealerRepository;
+    private final ConnectionRepository connectionRepository;
 
     /**
      * Вернуть всех контрагентов из БД
      */
+    @Transactional(readOnly = true)
     public List<DealerInDbDTO> getAllDealers() {
+        List<Connection> connections = connectionRepository.findAll();
+
         return dealerRepository.findAll().stream()
             .map(dealer -> DealerInDbDTO.builder()
                 .uid(dealer.getUid().toString())
@@ -33,9 +41,18 @@ public class DealerService {
                 .inn(dealer.getInn())
                 .kpp(dealer.getKpp())
                 .region(dealer.getRegion())
-                .createDate(dealer.getCreateDate())
+                .createDate(dealer.getCreateDate().toString())
                 .createAuthor(dealer.getCreateAuthor())
-                .isDeleted(dealer.getIsDeleted())
+                .lastUpdated(
+                    connections.stream()
+                        .filter(conn -> conn.getDealer().getUid().equals(dealer.getUid()))
+                        .filter(conn -> conn.getLastTaskDate() != null)
+                        .sorted(Comparator.comparing(Connection::getLastTaskDate).reversed())
+                        .map(Connection::getLastTaskDate)
+                        .peek(some -> System.out.println("some_thing" + some))
+                        .map(LocalDateTime::toString)
+                        .findFirst().orElse(null)
+                )
                 .build())
             .collect(toList());
     }

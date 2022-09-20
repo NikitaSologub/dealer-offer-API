@@ -35,11 +35,11 @@ public class DealerInDbDTO {
     String region;
 
     @ApiModelProperty(value = "Дата занесения контрагента в базу")
-    LocalDateTime createDate;
+    String createDate;
 
     @ApiModelProperty(value = "Автор занесения контрагента в базу")
     String createAuthor;
 
-    @ApiModelProperty(value = "Является ли контрагент неактивным")
-    boolean isDeleted;
+    @ApiModelProperty(value = "Последняя дата внесения данных по любому Connection для этого контрагенту")
+    String lastUpdated;
 }
