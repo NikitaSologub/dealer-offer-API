@@ -15,8 +15,8 @@ import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
 import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 import ru.alfaleasing.dealer.offer.api.service.DealerService;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static ru.alfaleasing.dealer.offer.api.controller.StockController.AUTHORIZATION;
 import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_CLIENT_ID;
@@ -32,17 +32,15 @@ public class DealerController implements DealerApi {
 
     private final DealerService dealerService;
 
-    @PostMapping("/load/dealer") // todo - добавить это для загрузки контрагентов
+    @PostMapping("/load/dealer")
     public ResponseEntity<?> loadDealerFromCRM(@RequestHeader(AUTHORIZATION) String token,
                                                @RequestHeader(X_CLIENT_ID) String clientId,
                                                @ApiParam @RequestBody DealerDTO dealer) {
-        log.info(LocalDateTime.now() + " request from postman to /v1/dealer/load");
-        System.out.println("dealer's array from postman = " + dealer);
-        // 1) Приходит контрагент из CRM (это фактически дилер)
-        // сохраняем его в бд
-        // 2) Создаём этому дилеру два типа конекшенов (API и FILE)
-        //Примечание - конекшен для EXTERNAL_API создаётся в ручную а LINK - не используем вовсе (пока что)
-        return ResponseEntity.ok().build();
+        log.info("Получили dealerDTO из 1С (CRM) = " + dealer);
+        UUID dealerUid = dealerService.loadDealer(dealer, clientId);
+        return ResponseEntity
+            .ok()
+            .body(dealerUid);
     }
 
     @GetMapping("/dealers")

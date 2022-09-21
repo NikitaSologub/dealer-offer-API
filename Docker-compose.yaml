@@ -1,15 +1,16 @@
 version: "3"
 services:
   dealer-offer-api: # ШЛЮЗ - через него идет вся работа
-    image: nikitasologub/dealer-offer-api:v0030
-#    image: api
-#    build: .
+#    image: nikitasologub/dealer-offer-api:v0031
+    image: api
+    build: .
     container_name: dealer-offer-api
     ports:
       - "15073:15073"
     depends_on:
       - rabbitmq
       - minio
+      - postgres
     environment:
       RABBIT_HOST: "rabbitmq" # (dev- rbmqtest-01-msk.inner.alfaleasing.ru) (http://rbmqtest-01-msk.inner.alfaleasing.ru/)
       RABBIT_PORT: "5672"
@@ -20,9 +21,9 @@ services:
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
       DRIVER_CLASS_NAME: org.postgresql.Driver
-      URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
-      USERNAME: car_search_platform_db_user
-      PASSWORD: FP8VCNJ8gvU7YzGi
+#      URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
+#      USERNAME: car_search_platform_db_user
+#      PASSWORD: FP8VCNJ8gvU7YzGi
     networks:
       - application-network
 
@@ -36,13 +37,26 @@ services:
     environment:
       DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
 
-  avtomir-dealer-provider: # микросервис для похода на Автомир
-    image: avtomir
-    container_name: avtomir-self-loading-provider
-    ports:
-      - "9079:9079"
+#  avtomir-dealer-provider: # микросервис для похода на Автомир
+#    image: loverloser1804/avtomir-self-dealer-provider:422
+##    image: avtomir
+#    container_name: avtomir-self-loading-provider
+#    ports:
+#      - "9079:9079"
+#    environment:
+#      DEALER_OFFER_API_HOST: "http://dealer-offer-api:15073"
+#    networks:
+#      - application-network
+
+  postgres:
+    image: postgres
+    container_name: postgres
     environment:
-      DEALER_OFFER_HOST: "http://dealer-offer-api:15073"
+      POSTGRES_DB: habrdb
+      POSTGRES_USER: habrpguser
+      POSTGRES_PASSWORD: pgpwd4habr
+    ports:
+      - "5432:5432"
     networks:
       - application-network
 
