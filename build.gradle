@@ -33,7 +33,7 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation "org.postgresql:postgresql:${postgresVersion}"
+    runtimeOnly "org.postgresql:postgresql:${postgresVersion}"
     implementation "com.vladmihalcea:hibernate-types-52:${vladmihalceaVersion}"
     compile "org.springframework.boot:spring-boot-starter-web"
     implementation 'org.springframework.data:spring-data-jpa'
@@ -44,6 +44,7 @@ dependencies {
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 //	implementation "ru.alfaleasing:logging:release-2.2.1"
+    implementation 'org.liquibase:liquibase-core'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testImplementation "org.springframework.boot:spring-boot-starter-test"

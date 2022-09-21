@@ -29,6 +29,7 @@ public class Dealer implements BaseEntity<Long> {
     Long id;
     UUID uid;
     String name;
+    String location;
     String region;
     String inn;
     String kpp;

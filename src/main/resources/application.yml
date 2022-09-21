@@ -8,11 +8,16 @@ minio:
   access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
   secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
 spring:
+  liquibase:
+    default-schema: public
   datasource:
     driver-class-name: ${DRIVER_CLASS_NAME:org.postgresql.Driver}
-    url: ${URL:jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db}
-    username: ${USERNAME:car_search_platform_db_user}
-    password: ${PASSWORD:FP8VCNJ8gvU7YzGi}
+#    url: ${URL:jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db}
+#    username: ${USERNAME:car_search_platform_db_user}
+#    password: ${PASSWORD:FP8VCNJ8gvU7YzGi}
+    url: ${URL:jdbc:postgresql://postgres:5432/habrdb}
+    username: ${USERNAME:habrpguser}
+    password: ${PASSWORD:pgpwd4habr}
   jpa:
     show-sql: true
     database: postgresql
