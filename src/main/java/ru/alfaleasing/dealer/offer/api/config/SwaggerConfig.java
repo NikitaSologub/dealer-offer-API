@@ -9,7 +9,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collections;
 
-@Configuration //todo - Убрать
+@Configuration
 public class SwaggerConfig {
 
     @Bean

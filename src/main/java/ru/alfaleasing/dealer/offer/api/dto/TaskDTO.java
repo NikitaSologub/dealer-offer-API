@@ -2,20 +2,13 @@ package ru.alfaleasing.dealer.offer.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.Value;
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiModel(description = "Dto таски для отправки в Rabbit")
 public class TaskDTO {
 

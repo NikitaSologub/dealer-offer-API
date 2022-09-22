@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.api.controller.param;
+package ru.alfaleasing.dealer.offer.api.constant;
 
 /**
  * Способы загрузки данных по стокам
@@ -11,17 +11,7 @@ public enum LoadingType {
     API,
 
     /**
-     * Через внешнюю ссылку
-     */
-    LINK,
-
-    /**
      * Способы загрузки данных по стокам
      */
-    FILE,
-
-    /**
-     * Используя api стороннего микросервиса
-     */
-    EXTERNAL_API
+    FILE
 }

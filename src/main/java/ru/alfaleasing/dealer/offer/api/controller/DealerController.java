@@ -18,8 +18,8 @@ import ru.alfaleasing.dealer.offer.api.service.DealerService;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.AUTHORIZATION;
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_CLIENT_ID;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.AUTHORIZATION;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.X_CLIENT_ID;
 
 /**
  * Контроллер для работы с дилерами
@@ -36,7 +36,7 @@ public class DealerController implements DealerApi {
     public ResponseEntity<?> loadDealerFromCRM(@RequestHeader(AUTHORIZATION) String token,
                                                @RequestHeader(X_CLIENT_ID) String clientId,
                                                @ApiParam @RequestBody DealerDTO dealer) {
-        log.info("Получили dealerDTO из 1С (CRM) = " + dealer);
+        log.info("Получили dealerDTO из 1С (CRM) = {}", dealer);
         UUID dealerUid = dealerService.loadDealer(dealer, clientId);
         return ResponseEntity
             .ok()

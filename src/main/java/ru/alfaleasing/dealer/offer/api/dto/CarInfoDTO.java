@@ -26,7 +26,6 @@ public class CarInfoDTO {
     @JsonProperty("status")
     String status;
 
-
     @ApiModelProperty(value = "Описание причины публикации (или не публикации) конкретного стока")
     @JsonProperty("description")
     String description;

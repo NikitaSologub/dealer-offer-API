@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.api.controller.param;
+package ru.alfaleasing.dealer.offer.api.constant;
 
 /**
  * Статусы обработки объекта типа Task в системах ГОИ и КЛИ

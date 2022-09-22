@@ -10,7 +10,7 @@ services:
     depends_on:
       - rabbitmq
       - minio
-      - postgres
+#      - postgres
     environment:
       RABBIT_HOST: "rabbitmq" # (dev- rbmqtest-01-msk.inner.alfaleasing.ru) (http://rbmqtest-01-msk.inner.alfaleasing.ru/)
       RABBIT_PORT: "5672"
@@ -21,9 +21,9 @@ services:
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
       DRIVER_CLASS_NAME: org.postgresql.Driver
-#      URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
-#      USERNAME: car_search_platform_db_user
-#      PASSWORD: FP8VCNJ8gvU7YzGi
+      URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
+      USERNAME: car_search_platform_db_user
+      PASSWORD: FP8VCNJ8gvU7YzGi
     networks:
       - application-network
 
@@ -48,17 +48,17 @@ services:
 #    networks:
 #      - application-network
 
-  postgres:
-    image: postgres
-    container_name: postgres
-    environment:
-      POSTGRES_DB: habrdb
-      POSTGRES_USER: habrpguser
-      POSTGRES_PASSWORD: pgpwd4habr
-    ports:
-      - "5432:5432"
-    networks:
-      - application-network
+#  postgres:
+#    image: postgres
+#    container_name: postgres
+#    environment:
+#      POSTGRES_DB: habrdb
+#      POSTGRES_USER: habrpguser
+#      POSTGRES_PASSWORD: pgpwd4habr
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - application-network
 
   rabbitmq: # шина будет посылать сюда сообщения
     image: rabbitmq:3.10-management

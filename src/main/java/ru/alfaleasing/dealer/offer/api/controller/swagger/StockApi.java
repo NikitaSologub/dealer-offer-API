@@ -12,10 +12,10 @@ import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.AUTHORIZATION;
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_CLIENT_ID;
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_SALON_UID;
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_SOURCE;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.AUTHORIZATION;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.X_CLIENT_ID;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.X_SALON_UID;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.X_SOURCE;
 
 public interface StockApi {
 

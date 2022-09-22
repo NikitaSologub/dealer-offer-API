@@ -38,10 +38,15 @@ public class MinIOService {
     @SneakyThrows
     public void writeFileToMinIO(Object response, String filename) {
         try {
-            createBucketIfNotExists();
+            log.info("Пытаемся положить объект {} как файл {} в minIO", response, filename);
+
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+//                log.info("Bucket with name {} is not exists", bucketName); // todo - заменить на это
+//                throw new IllegalArgumentException(""); // todo - заменить на это
+                createBucket(bucketName); // todo - удалить (только для локальных запусков)
+            }
 
             byte[] bytes = objectMapper.writeValueAsBytes(response);
-            log.info("Пытаемся положить объект в minIO");
             ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
                 .bucket(bucketName)
                 .object(filename)
@@ -49,10 +54,10 @@ public class MinIOService {
                 .contentType(APPLICATION_JSON.getMimeType())
                 .build());
 
-            log.info("objectWriteResponse = {}", objectWriteResponse);
-            log.info("{} successfully uploaded to: container: {}   blob: {}", filename, bucketName, filename);
+            log.info("{} successfully uploaded to: container. ObjectWriteResponse = {}", filename, objectWriteResponse);
         } catch (MinioException e) {
-            log.info("Error occurred: " + e);
+            log.error("Не смогли положить объект в minIO. Error occurred: " + e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -60,14 +65,9 @@ public class MinIOService {
      * Метод создаёт bucket в пространстве minIO если его не существует
      */
     @SneakyThrows
-    private void createBucketIfNotExists() {// todo - для этого на dev и prod не будет прав. Продумать проброс ошибки
-        boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder()
+    private void createBucket(String bucketName) {// todo - удалить (только для локальных запусков)
+        minioClient.makeBucket(MakeBucketArgs.builder()
             .bucket(bucketName)
             .build());
-        if (!bucketExists) {
-            minioClient.makeBucket(MakeBucketArgs.builder()
-                .bucket(bucketName)
-                .build());
-        }
     }
 }
