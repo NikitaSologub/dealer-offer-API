@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
-import ru.alfaleasing.dealer.offer.api.dto.CarInfoDTO;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
-import ru.alfaleasing.dealer.offer.api.dto.TaskDTO;
-import ru.alfaleasing.dealer.offer.api.dto.TaskResultDTO;
 import ru.alfaleasing.dealer.offer.api.entity.Connection;
-import ru.alfaleasing.dealer.offer.api.entity.Dealer;
 import ru.alfaleasing.dealer.offer.api.entity.Task;
+import ru.alfaleasing.dealer.offer.api.exception.EntityNotFoundException;
+import ru.alfaleasing.dealer.offer.api.mapper.TaskMapper;
 import ru.alfaleasing.dealer.offer.api.repository.ConnectionRepository;
 import ru.alfaleasing.dealer.offer.api.repository.DealerRepository;
 import ru.alfaleasing.dealer.offer.api.repository.TaskRepository;
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.JSON;
 
 /**
  * Сервис для работы с документами автомобилей
@@ -29,16 +26,19 @@ import static java.util.stream.Collectors.toList;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class CarService {
 
-    private static final String BEFORE_GOI_AND_CLI = "before_goi_and_cli";
-    private static final String JSON = ".json";
+    public static final String CONNECTION = "Connection";
+    public static final String LOADING_TYPE = "LoadingType";
+    public static final String DEALER = "Dealer";
+    public static final String SALON_ID = "salonId";
+
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
     private final DealerRepository dealerRepository;
     private final ConnectionRepository connectionRepository;
     private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
 
     /**
      * Метод используется для загрузки стоков и помещения их в minIO и отправки объекта в RabbitMQ
@@ -47,74 +47,26 @@ public class CarService {
      * @param methodType способ загрузки данных (FILE, API)
      * @param salonId    UUID конкретного дилера
      */
-    @Transactional(rollbackForClassName = {"Exception"})
+    @Transactional
     public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId, String clientId) {
         log.info("methodType = {} salonId = {}  clientId = {}", methodType, salonId, clientId);
         LocalDateTime now = LocalDateTime.now();
 
-        log.info("1) Берем из БД по salonId нужного дилера и создаём Task в котором будет информация из дилера");
-        Dealer dealer = dealerRepository.getDealerByUid(salonId); //3fa85f64-5717-4562-b3fc-2c963f66afa6 - avtomir
+        return dealerRepository.getDealerByUid(salonId)
+            .map(dealer -> {
+                Connection currentConnection = connectionRepository.getConnectionsByDealer(dealer.getUid()).stream()
+                    .filter(conn -> methodType.equalsIgnoreCase(conn.getType().toString()))
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException(CONNECTION, LOADING_TYPE, methodType));
 
-        if (dealer != null) {
-            Connection currentConnection = connectionRepository.getConnectionsByDealer(dealer).stream()
-                .filter(conn -> methodType.equalsIgnoreCase(conn.getType().toString()))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                Task savedTask = taskRepository.save(taskMapper.getTask(stock, clientId, now, dealer, currentConnection, UUID.randomUUID()));
+                currentConnection.setLastTaskDate(now);
+                connectionRepository.save(currentConnection);
 
-            UUID taskUid = UUID.randomUUID();
+                minIOService.writeFileToMinIO(stock, savedTask.getUid() + JSON);
+                queueProcessor.publishMessage(taskMapper.getTaskDTO(dealer, savedTask));
+                return savedTask.getUid();
 
-            Task task = Task.builder()
-                .uid(taskUid)
-                .connection(currentConnection)
-                .dealer(dealer)
-                .createDate(now)
-                .author(clientId)
-                .status(TaskStatus.IN_WORK)
-                .isUsed(false)
-                .offersReceived(stock.size())
-                .taskResult(TaskResultDTO.builder()
-                    .taskUid(taskUid)
-                    .status(TaskStatus.IN_WORK)
-                    .results(stock.stream()
-                        .map(car -> CarInfoDTO.builder()
-                            .vin(car.getVin())
-                            .status(BEFORE_GOI_AND_CLI)
-                            .build())
-                        .collect(toList()))
-                    .build())
-                .offersPublished(0)
-                .build();
-
-            log.info("2) Записываем в базу данных объект типа task и ставим ему статус (IN_WORK)");
-            System.out.println("task = " + task);
-            Task taskInDb = taskRepository.save(task);
-            System.out.println("taskInDb = " + taskInDb);
-
-            log.info("3) Обновляем поле в БД (last_task_date) для объекта Connection и ставим туда дату создания таски (LocalDate.new())");
-            currentConnection.setLastTaskDate(now);
-            connectionRepository.save(currentConnection);
-
-            log.info("4) Создаём DTO для Task чтобы отправить его в Rabbit");
-            TaskDTO taskDTO = TaskDTO.builder()
-                .taskUid(taskInDb.getUid())
-                .dealerUid(dealer.getUid())
-                .dealerName(dealer.getName())
-                .city(null)
-                .isUsed(false)
-                .s3ObjectName(taskInDb.getUid() + JSON)
-                .build();
-
-            log.info("5) Кладём все стоки в minIO с UUID таски (UUID taskUid = UUID.randomUUID();)");
-            minIOService.writeFileToMinIO(stock, taskInDb.getUid() + JSON);
-
-            log.info("6) Записываем в RabbitMQ объект типа taskDTO");
-            queueProcessor.publishMessage(taskDTO);
-
-            log.info("7) Возвращаем UUID нашей созданной таски");
-            return taskInDb.getUid();
-
-        } else {
-            throw new IllegalArgumentException("dealer = null - формат данных не совпадает");
-        }
+            }).orElseThrow(() -> new EntityNotFoundException(DEALER, SALON_ID, salonId));
     }
 }

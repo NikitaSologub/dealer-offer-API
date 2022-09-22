@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.alfaleasing.dealer.offer.api.controller.param.TaskStatus;
+import ru.alfaleasing.dealer.offer.api.constant.TaskStatus;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,45 +1,53 @@
 package ru.alfaleasing.dealer.offer.api.entity;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import ru.alfaleasing.dealer.offer.api.controller.param.LoadingType;
+import lombok.ToString;
+import ru.alfaleasing.dealer.offer.api.constant.LoadingType;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(of = "uid")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "connections")
 public class Connection implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    UUID uid;
+    private Long id;
+
+    private UUID uid;
+
     @Enumerated(EnumType.STRING)
-    LoadingType type;
-    @ManyToOne
-    @JoinColumn(name = "dealer_id")
-    Dealer dealer;
-    LocalDateTime createDate;
-    String createAuthor;
-    Boolean isUsed;
-    LocalDateTime lastTaskDate;
+    private LoadingType type;
+
+    private LocalDateTime createDate;
+
+    private String createAuthor;
+
+    private boolean isUsed;
+
+    private LocalDateTime lastTaskDate;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Dealer dealer;
 }

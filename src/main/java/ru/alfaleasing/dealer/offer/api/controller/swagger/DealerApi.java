@@ -13,8 +13,9 @@ import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 
 import java.util.List;
 
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.AUTHORIZATION;
-import static ru.alfaleasing.dealer.offer.api.controller.StockController.X_CLIENT_ID;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.AUTHORIZATION;
+import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.X_CLIENT_ID;
+
 
 public interface DealerApi {
 
