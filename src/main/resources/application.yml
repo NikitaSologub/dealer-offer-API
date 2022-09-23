@@ -3,7 +3,7 @@ server:
   servlet.context-path: /dealer-offer-api
 
 minio:
-  url: ${MINIO_ROOT_URL:https://localhost:9000/} # для dev - https://storage.yandexcloud.net/
+  url: ${MINIO_ROOT_URL:https://https://storage.yandexcloud.net/}
   bucket: ${MINIO_BUCKET:svc-yc-car-search}
   access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
   secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}

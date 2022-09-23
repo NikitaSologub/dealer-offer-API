@@ -14,4 +14,3 @@ public class ParseExceptionHandler {
         log.info("Не удалось разобрать тело запроса из Json в объект TaskResponseFromCSharpSystemDTO ={}", e.getMessage());
     }
 }
-

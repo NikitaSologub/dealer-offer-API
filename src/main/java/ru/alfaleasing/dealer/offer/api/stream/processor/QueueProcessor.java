@@ -37,48 +37,49 @@ public class QueueProcessor {
     public void publishMessage(Object data) {
         log.info("Записываем сообщение в очередь: {}", data);
         queueSender.sendCarStock().send(MessageBuilder.withPayload(data)
-                .build());
+            .build());
     }
 
     /**
      * Для получения сообщений из С# системы
      */
     @StreamListener(QueueReceiver.C_SHARP_EXCHANGE)
-    public void receiverFromCSharpSystem(TaskResultDTO aggregationServerResponse) { //todo - рефакторинг + logs
+    public void receiverFromCSharpSystem(TaskResultDTO aggregationServerResponse) {
         log.info("aggregationServerResponse from C# systems= {}", aggregationServerResponse);
 
-
-//        Optional<Task> taskFromDb1 = taskRepository.findTaskByUid(aggregationServerResponse.getTaskUid());
         taskRepository.findTaskByUid(aggregationServerResponse.getTaskUid()).ifPresent(task -> {
             TaskStatus currentStatus = aggregationServerResponse.getStatus();
 
             if (TaskStatus.IN_WORK == currentStatus) {
                 task.setStatus(currentStatus);
+                task.setOffersPublished(0);
                 task.setTaskResult(aggregationServerResponse);
-            } else if (TaskStatus.DONE == currentStatus || TaskStatus.FAIL == currentStatus) {
-                log.info("2.0. Попали в блок DONE и FAIL");
 
-                log.info("2.1. Смотрим сколько автомобилей содержат status='published' (они прошли проверку ГОИ и КЛИ)");
+            } else if (TaskStatus.DONE == currentStatus) {
                 long publishedCars = aggregationServerResponse.getResults().stream()
-                        .filter(Objects::nonNull)
-                        .filter(car -> PUBLISHED.equals(car.getStatus()))
-                        .count();
-
-                log.info("2.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, publishedCars);
+                    .filter(Objects::nonNull)
+                    .filter(car -> PUBLISHED.equals(car.getStatus()))
+                    .count();
                 task.setStatus(currentStatus);
-                task.setOffersPublished(Math.toIntExact(publishedCars)); //todo Integer.parseInt();
+                task.setOffersPublished(Integer.parseInt(String.valueOf(publishedCars)));
                 task.setTaskResult(aggregationServerResponse);
 
                 List<CarInfoDTO> notPublishedCars = aggregationServerResponse.getResults().stream()
-                        .filter(Objects::nonNull)
-                        .filter(car -> !PUBLISHED.equals(car.getStatus()))
-                        .collect(toList());
+                    .filter(Objects::nonNull)
+                    .filter(car -> !PUBLISHED.equals(car.getStatus()))
+                    .collect(toList());
                 log.info("NOT PUBLISHED CARS BY SOME REASON = {}", notPublishedCars);
+
+            } else if (TaskStatus.FAIL == currentStatus) {
+                task.setStatus(currentStatus);
+                task.setOffersPublished(0);
+                task.setTaskResult(aggregationServerResponse);
+
             } else {
-                log.info("3.0 Попали в блок ERROR. Из системы пришёл странный статус - не известно что с ним делать");
+                log.info("ERROR. Incorrect TaskStatus from - aggregation service");
             }
-            Task changedTask = taskRepository.save(task);
-            log.info("");//todo
+            Task savedTask = taskRepository.save(task);
+            log.info("Task by uid={} was updated with status-{} data={}", savedTask.getUid(), currentStatus, savedTask);
         });
     }
 }
