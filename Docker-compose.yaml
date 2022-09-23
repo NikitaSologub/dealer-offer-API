@@ -6,17 +6,17 @@ services:
     build: .
     container_name: dealer-offer-api
     ports:
-      - "15073:15073"
-    depends_on:
-      - rabbitmq
-      - minio
+      - "9080:9080"
+#    depends_on:
+#      - rabbitmq
+#      - minio
 #      - postgres
     environment:
-      RABBIT_HOST: "rabbitmq" # (dev- rbmqtest-01-msk.inner.alfaleasing.ru) (http://rbmqtest-01-msk.inner.alfaleasing.ru/)
+      RABBIT_HOST: "rbmqtest-01-msk.inner.alfaleasing.ru" # (dev- rbmqtest-01-msk.inner.alfaleasing.ru) (local - rabbitmq) (http://rbmqtest-01-msk.inner.alfaleasing.ru/)
       RABBIT_PORT: "5672"
-      RABBIT_USERNAME: "guest" # (dev- nosologub)
-      RABBIT_PASSWORD: "guest" # (dev- fuj53lWR816)
-      MINIO_ROOT_URL: http://minio:9000/ # (dev- https://storage.yandexcloud.net/)
+      RABBIT_USERNAME: "nosologub" # (dev- nosologub) (local - guest)
+      RABBIT_PASSWORD: "fuj53lWR816" # (dev- fuj53lWR816) (local - guest)
+      MINIO_ROOT_URL: https://storage.yandexcloud.net/ # (local- http://minio:9000/)
       MINIO_BUCKET: svc-yc-car-search
       MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
       MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
@@ -35,7 +35,7 @@ services:
     networks:
       - application-network
     environment:
-      DEALER_OFFER_API_URL: "http://dealer-offer-api:15073"
+      DEALER_OFFER_API_URL: "http://dealer-offer-api:9080"
 
 #  avtomir-dealer-provider: # микросервис для похода на Автомир
 #    image: loverloser1804/avtomir-self-dealer-provider:422
@@ -44,7 +44,7 @@ services:
 #    ports:
 #      - "9079:9079"
 #    environment:
-#      DEALER_OFFER_API_HOST: "http://dealer-offer-api:15073"
+#      DEALER_OFFER_API_HOST: "http://dealer-offer-api:9080"
 #    networks:
 #      - application-network
 
@@ -60,36 +60,36 @@ services:
 #    networks:
 #      - application-network
 
-  rabbitmq: # шина будет посылать сюда сообщения
-    image: rabbitmq:3.10-management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBIT_PORT: 5672
-      RABBIT_USERNAME: guest
-      RABBIT_PASSWORD: guest
-    networks:
-      - application-network
+#  rabbitmq: # шина будет посылать сюда сообщения
+#    image: rabbitmq:3.10-management
+#    container_name: rabbitmq
+#    hostname: rabbitmq
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    environment:
+#      RABBIT_PORT: 5672
+#      RABBIT_USERNAME: guest
+#      RABBIT_PASSWORD: guest
+#    networks:
+#      - application-network
 
-  minio: # шина будет записывать сюда json файлы
-    image: minio/minio:latest
-    container_name: minio
-    hostname: minio
-    command: server --console-address ":9001" /data/
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_BUCKET: svc-yc-car-search
-      MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
-      MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
-    networks:
-      - application-network
-    volumes:
-      - /data/minio/data:/export
+#  minio: # шина будет записывать сюда json файлы
+#    image: minio/minio:latest
+#    container_name: minio
+#    hostname: minio
+#    command: server --console-address ":9001" /data/
+#    ports:
+#      - "9000:9000"
+#      - "9001:9001"
+#    environment:
+#      MINIO_BUCKET: svc-yc-car-search
+#      MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
+#      MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
+#    networks:
+#      - application-network
+#    volumes:
+#      - /data/minio/data:/export
 
 networks:
   application-network:

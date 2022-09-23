@@ -1,8 +1,8 @@
 Swagger UI (локально)
-http://localhost:15073/dealer-offer-api/swagger-ui.html
+http://localhost:9080/dealer-offer-api/swagger-ui.html
 
 Swagger docs (локально)
-http://localhost:15073/dealer-offer-api/v2/api-docs
+http://localhost:9080/dealer-offer-api/v2/api-docs
 
 RabbitMQ UI:
 (local)      http://localhost:15672/#/

@@ -1,5 +1,5 @@
 FROM openjdk:8
-ENV PORT 15073
+ENV PORT 9080
 
 WORKDIR /usr/app/
 COPY /build/libs/* ./app.jar
