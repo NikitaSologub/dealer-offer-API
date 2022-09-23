@@ -1,27 +1,18 @@
-server:
-  port: 9080
-  servlet.context-path: /dealer-offer-api
-
-minio:
-  url: ${MINIO_ROOT_URL:https://https://storage.yandexcloud.net/}
-  bucket: ${MINIO_BUCKET:svc-yc-car-search}
-  access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
-  secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
 spring:
+  application.name: dealer-offer-api
   liquibase:
     default-schema: public
   datasource:
-    driver-class-name: ${DRIVER_CLASS_NAME:org.postgresql.Driver}
-    url: ${URL:jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db}
-    username: ${USERNAME:car_search_platform_db_user}
-    password: ${PASSWORD:FP8VCNJ8gvU7YzGi}
+    url: ${POSTGRES_DB:jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db}
+    username: ${POSTGRES_USER:car_search_platform_db_user}
+    password: ${POSTGRES_PASSWORD:FP8VCNJ8gvU7YzGi}
   jpa:
-    show-sql: true
-    database: postgresql
+#    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     hibernate:
-      naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+      naming:
+        physical-strategy: com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy
   cloud:
     stream:
       rabbit:
@@ -50,16 +41,28 @@ spring:
           environment:
             spring:
               rabbitmq:
-                virtual-host: ${RABBIT_VHOST:/}
+                deliveryMode: ${DELIVERY_MODE:2}
+                host: ${RABBIT_HOST:localhost}
                 port: ${RABBIT_PORT:5672}
                 username: ${RABBIT_USERNAME:guest}
                 password: ${RABBIT_PASSWORD:guest}
-                host: ${RABBIT_HOST:localhost}
-                deliveryMode: ${DELIVERY_MODE:2}
+                virtual-host: ${RABBIT_VHOST:/}
+
+app:
+  minio:
+    url: ${MINIO_ROOT_URL:https://https://storage.yandexcloud.net/}
+    bucket: ${MINIO_BUCKET:svc-yc-car-search}
+    access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
+    secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
 
 logging:
   level:
     ru:
       alfaleasing: ${LOGGING_LEVEL:INFO}
-      alfaleasing.logging:
-        http: ${LOGGING_LEVEL:INFO}
+    org:
+      springframework:
+        security: INFO
+
+server:
+  port: 9080
+  servlet.context-path: /dealer-offer-api

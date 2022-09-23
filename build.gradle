@@ -27,25 +27,25 @@ ext {
     set('openFeignMicrometrVersion', "11.6")
     set('lombokVersion', "1.18.24")
     set('swaggerVersion', "2.9.2")
-    set('postgresVersion',"42.2.5")
-    set('vladmihalceaVersion',"2.3.4")
-    set('alfaleasingLoggingVersion',"release-2.2.1")
+    set('postgresVersion', "42.2.5")
+    set('vladmihalceaVersion', "2.3.4")
+    set('alfaleasingLoggingVersion', "release-2.2.1")
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.data:spring-data-jpa'
-    compile "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit"
     runtimeOnly "org.postgresql:postgresql:${postgresVersion}"
-    implementation "com.vladmihalcea:hibernate-types-52:${vladmihalceaVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    compile "org.springframework.boot:spring-boot-starter-web"
     implementation "io.minio:minio:${minIOVersion}"
     implementation "io.github.openfeign:feign-micrometer:${openFeignMicrometrVersion}"
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
-	implementation "ru.alfaleasing:logging:${alfaleasingLoggingVersion}"
+    implementation "ru.alfaleasing:logging:${alfaleasingLoggingVersion}"
     implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.data:spring-data-jpa'
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit"
+    implementation "com.vladmihalcea:hibernate-types-52:${vladmihalceaVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 
