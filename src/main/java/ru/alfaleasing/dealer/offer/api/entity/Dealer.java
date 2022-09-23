@@ -69,7 +69,7 @@ public class Dealer implements BaseEntity<Long> {
     @OneToMany(mappedBy = "dealer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
 
-    public void addConnection(Connection connection){
+    public void addConnection(Connection connection) {
         connection.setDealer(this);
         connections.add(connection);
     }

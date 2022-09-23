@@ -16,6 +16,7 @@ import ru.alfaleasing.dealer.offer.api.stream.QueueSender;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +49,9 @@ public class QueueProcessor {
         log.info("aggregationServerResponse from C# systems= {}", aggregationServerResponse);
 
 
-        Task taskFromDb = taskRepository.getTaskByUid(aggregationServerResponse.getTaskUid());
+//        Optional<Task> taskFromDb1 = taskRepository.findTaskByUid(aggregationServerResponse.getTaskUid());
+        Task taskFromDb = taskRepository.findTaskByUid(aggregationServerResponse.getTaskUid());
+
         if (taskFromDb == null) {
             log.info("Из из C# систем пришёл запрос на изменение статуса task с uuid которого не существует в базе");
             return;
@@ -67,7 +70,6 @@ public class QueueProcessor {
 
             log.info("1.2 Объекту Task из БД  обновляем TaskStatus ={}, кол-во опубликованных машин ={} и jsonb как весь наш файл", currentStatus, carsMappedByGoiCount);
             taskFromDb.setStatus(currentStatus);
-            taskFromDb.setOffersPublished(Math.toIntExact(carsMappedByGoiCount));
             taskFromDb.setTaskResult(aggregationServerResponse);
             Task changedTask = taskRepository.save(taskFromDb);
             log.info("1.3 Объект Task обновлён в БД  task ={}", changedTask);

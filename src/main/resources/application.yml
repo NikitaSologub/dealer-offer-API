@@ -32,20 +32,20 @@ spring:
           dealer_offer_api:
             producer:
               exchangeType: direct
-              routing-key-expression: "'new-offers-list.event.create'"
+              routing-key-expression: "'new-offers-list.event.create'" # new-offers-list.event.create
           c_sharp_exchange:
             consumer:
               exchangeType: direct
               queueNameGroupOnly: true # Использовать для названия очереди только её имя без exchange
-              binding-routing-key: "task-status.from.c-sharp.read"
+              binding-routing-key: "task-status.from.c-sharp.read" # offer-result.event.create
       bindings:
         dealer_offer_api:
-          destination: dealer_offer_api
-          group: to.stock-service.new-offers-list
+          destination: dealer_offer_api # exchange.dealer-offer-api
+          group: to.stock-service.new-offers-list # queue.dealer-offer-api.to.offer-agrigation-service.new-offers-list
           binder: rabbit
         c_sharp_exchange:
-          destination: c_sharp_exchange
-          group: c-sharp-queue
+          destination: c_sharp_exchange # exchange.offer-agrigation-service
+          group: c-sharp-queue # offer-agrigation-service.to.dealer-offer-api
           binder: rabbit
       binders:
         rabbit:
