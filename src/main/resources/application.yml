@@ -13,6 +13,11 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${app.identity-server.url}/.well-known/openid-configuration/jwks
   cloud:
     stream:
       rabbit:
@@ -49,11 +54,18 @@ spring:
                 virtual-host: ${RABBIT_VHOST:/}
 
 app:
+  identity-server:
+    url: ${IDENTITY_SERVER_HOST:https://identity-stage.alfaleasing.ru}
+    client-id: ${IDENTITY_CLIENT_ID:xxx}
+    client-secret: ${IDENTITY_CLIENT_SECRET:xxx}
+    scope: ${IDENTITY_SCOPE:}
   minio:
     url: ${MINIO_ROOT_URL:https://https://storage.yandexcloud.net/}
     bucket: ${MINIO_BUCKET:svc-yc-car-search}
     access-key: ${MINIO_ROOT_USER:YCAJEpPp9OIYu7W8v8kkCwlci}
     secret-key: ${MINIO_ROOT_PASSWORD:YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2}
+
+jwks.public-key.time-to-live: ${JWKS_PUBLIC_KEY_TTL:300}
 
 logging:
   level:
