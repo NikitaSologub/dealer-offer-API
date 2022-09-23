@@ -2,6 +2,7 @@ package ru.alfaleasing.dealer.offer.api.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import io.minio.errors.MinioException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -63,6 +64,12 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(HttpServletRequest request, Exception e) {
+        return createResponseEntity(request, HttpStatus.INTERNAL_SERVER_ERROR, e);
+    }
+
+    @ExceptionHandler(MinioException.class)
+    public ResponseEntity<?> handleBucketNotExist(HttpServletRequest request, MinioException e) {
+        log.error("Can't send dto to minIO. Bucket not exists. Error occurred: " + e);
         return createResponseEntity(request, HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 

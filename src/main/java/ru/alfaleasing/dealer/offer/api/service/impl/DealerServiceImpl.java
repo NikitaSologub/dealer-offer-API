@@ -57,6 +57,9 @@ public class DealerServiceImpl implements DealerService {
         Dealer dealerForSave = dealerMapper.toDealer(dealer, createdAuthor, now);
         dealerForSave.addConnection(connectionMapper.toConnection(LoadingType.FILE, createdAuthor, now));
         dealerForSave.addConnection(connectionMapper.toConnection(LoadingType.API, createdAuthor, now));
-        return dealerRepository.save(dealerForSave).getUid();
+        Dealer dealerSaved = dealerRepository.save(dealerForSave);
+        log.info("Dealer saved with uid={} in db with two connections (API and FILE)", dealerSaved.getUid());
+        return dealerRepository.save(dealerForSave)
+            .getUid();
     }
 }

@@ -71,8 +71,8 @@ public class CarServiceImpl implements CarService {
 
                 minIOService.writeFileToMinIO(stock, savedTask.getUid() + JSON);
                 queueProcessor.publishMessage(taskMapper.getTaskDTO(dealer, savedTask));
-                return savedTask.getUid();
 
+                return savedTask.getUid();
             })
             .orElseThrow(() -> new EntityNotFoundException(DEALER_NAME, SALON_ID_NAME, salonId));
     }

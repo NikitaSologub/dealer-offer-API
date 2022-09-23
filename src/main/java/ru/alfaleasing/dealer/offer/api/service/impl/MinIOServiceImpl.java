@@ -23,6 +23,7 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 @Transactional
 public class MinIOServiceImpl implements MinIOService {
 
+    private static final int AUTODETECTED_PART_SIZE = -1;
     private final ObjectMapper objectMapper;
     private final MinioClient minioClient;
 
@@ -42,14 +43,13 @@ public class MinIOServiceImpl implements MinIOService {
             ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
                 .bucket(bucketName)
                 .object(filename)
-                .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
+                .stream(new ByteArrayInputStream(bytes), bytes.length, AUTODETECTED_PART_SIZE)
                 .contentType(APPLICATION_JSON.getMimeType())
                 .build());
 
             log.info("{} successfully uploaded to: container. ObjectWriteResponse = {}", filename, objectWriteResponse);
         } else {
-            log.info("Bucket with name {} is not exists", bucketName);
-            throw new IllegalArgumentException("");
+            throw new RuntimeException("Bucket with name is not exists " + bucketName);
         }
     }
 

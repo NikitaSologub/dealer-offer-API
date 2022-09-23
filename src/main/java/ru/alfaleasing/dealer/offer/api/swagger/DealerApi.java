@@ -1,4 +1,4 @@
-package ru.alfaleasing.dealer.offer.api.controller.swagger;
+package ru.alfaleasing.dealer.offer.api.swagger;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

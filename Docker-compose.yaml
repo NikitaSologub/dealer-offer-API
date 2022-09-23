@@ -16,10 +16,10 @@ services:
       RABBIT_PORT: "5672"
       RABBIT_USERNAME: "nosologub" # (dev- nosologub) (local - guest)
       RABBIT_PASSWORD: "fuj53lWR816" # (dev- fuj53lWR816) (local - guest)
-      MINIO_ROOT_URL: https://storage.yandexcloud.net/ # (local- http://minio:9000/)
+      MINIO_SERVER_HOST: https://storage.yandexcloud.net/ # (local- http://minio:9000/)
       MINIO_BUCKET: svc-yc-car-search
-      MINIO_ROOT_USER: YCAJEpPp9OIYu7W8v8kkCwlci
-      MINIO_ROOT_PASSWORD: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
+      MINIO_CLIENT_ID: YCAJEpPp9OIYu7W8v8kkCwlci
+      MINIO_CLIENT_SECRET: YCM655s5lED4alDInim6hBpcbmBqOPO7xk-JLVh2
       DRIVER_CLASS_NAME: org.postgresql.Driver
       URL: jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db
       USERNAME: car_search_platform_db_user

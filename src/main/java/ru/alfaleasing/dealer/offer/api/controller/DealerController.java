@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alfaleasing.dealer.offer.api.controller.swagger.DealerApi;
+import ru.alfaleasing.dealer.offer.api.swagger.DealerApi;
 import ru.alfaleasing.dealer.offer.api.dto.DealerDTO;
 import ru.alfaleasing.dealer.offer.api.dto.DealerInDbDTO;
 import ru.alfaleasing.dealer.offer.api.service.DealerService;
