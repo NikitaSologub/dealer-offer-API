@@ -39,26 +39,33 @@ public class MinIOService {
     public void writeFileToMinIO(Object response, String filename) {
         try {
             log.info("Пытаемся положить объект {} как файл {} в minIO", response, filename);
+            if (minioClient.bucketExists(getBucket())) {
+                byte[] bytes = objectMapper.writeValueAsBytes(response);
+                ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(filename)
+                        .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
+                        .contentType(APPLICATION_JSON.getMimeType())
+                        .build());
 
-            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
-//                log.info("Bucket with name {} is not exists", bucketName); // todo - заменить на это
-//                throw new IllegalArgumentException(""); // todo - заменить на это
-                createBucket(bucketName); // todo - удалить (только для локальных запусков)
+                log.info("{} successfully uploaded to: container. ObjectWriteResponse = {}", filename, objectWriteResponse);
             }
+            //                log.info("Bucket with name {} is not exists", bucketName); // todo -
+//                throw new IllegalArgumentException(""); // todo - заменить на это
+            createBucket(bucketName); // todo - удалить (только для локальных запусков)
 
-            byte[] bytes = objectMapper.writeValueAsBytes(response);
-            ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
-                .bucket(bucketName)
-                .object(filename)
-                .stream(new ByteArrayInputStream(bytes), bytes.length, -1)
-                .contentType(APPLICATION_JSON.getMimeType())
-                .build());
-
-            log.info("{} successfully uploaded to: container. ObjectWriteResponse = {}", filename, objectWriteResponse);
         } catch (MinioException e) {
+
+            //todo handler
             log.error("Не смогли положить объект в minIO. Error occurred: " + e);
             throw new RuntimeException(e);
         }
+    }
+
+    private BucketExistsArgs getBucket() {
+        return BucketExistsArgs.builder()
+                .bucket(bucketName)
+                .build();
     }
 
     /**
@@ -67,7 +74,7 @@ public class MinIOService {
     @SneakyThrows
     private void createBucket(String bucketName) {// todo - удалить (только для локальных запусков)
         minioClient.makeBucket(MakeBucketArgs.builder()
-            .bucket(bucketName)
-            .build());
+                .bucket(bucketName)
+                .build());
     }
 }

@@ -15,16 +15,17 @@ spring:
     url: ${URL:jdbc:postgresql://lkpgdb-comm-test.inner.alfaleasing.ru:5432/car_search_platform_db}
     username: ${USERNAME:car_search_platform_db_user}
     password: ${PASSWORD:FP8VCNJ8gvU7YzGi}
-#    url: ${URL:jdbc:postgresql://postgres:5432/habrdb}
-#    username: ${USERNAME:habrpguser}
-#    password: ${PASSWORD:pgpwd4habr}
+  #    url: ${URL:jdbc:postgresql://postgres:5432/habrdb}
+  #    username: ${USERNAME:habrpguser}
+  #    password: ${PASSWORD:pgpwd4habr}
   jpa:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     hibernate:
-      naming-strategy : org.hibernate.cfg.EJB3NamingStrategy
+      naming:
+        physical-strategy: com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy
   cloud:
     stream:
       rabbit:
@@ -51,14 +52,12 @@ spring:
         rabbit:
           type: rabbit
           environment:
-            spring:
-              rabbitmq:
-                virtual-host: ${RABBIT_VHOST:/}
-                port: ${RABBIT_PORT:5672}
-                username: ${RABBIT_USERNAME:guest}
-                password: ${RABBIT_PASSWORD:guest}
-                host: ${RABBIT_HOST:localhost}
-                deliveryMode: ${DELIVERY_MODE:2}
+            virtual-host: ${RABBIT_VHOST:/}
+            port: ${RABBIT_PORT:5672}
+            username: ${RABBIT_USERNAME:guest}
+            password: ${RABBIT_PASSWORD:guest}
+            host: ${RABBIT_HOST:localhost}
+            deliveryMode: ${DELIVERY_MODE:2}
 
 #logging:
 #  level:

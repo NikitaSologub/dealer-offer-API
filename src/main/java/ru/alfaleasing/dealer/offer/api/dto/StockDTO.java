@@ -73,7 +73,6 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Размер скидки при покупке в лизинг")
     @JsonProperty("discount")
-    @Nullable
     BigInteger discount;
 
     @ApiModelProperty(value = "Местоположение авто")
@@ -82,7 +81,6 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Промо")
     @JsonProperty("promo")
-    @Nullable
     List<String> promo;
 
     @ApiModelProperty(value = "Онлайн бронирование")
@@ -91,7 +89,6 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Коды дополнительных опций")
     @JsonProperty("extra_options")
-    @Nullable
     List<String> extraOptions;
 
     @ApiModelProperty(value = "Код цвета кузова от производителя")
@@ -104,7 +101,6 @@ public class StockDTO {
 
     @ApiModelProperty(value = "Код модели от производителя")
     @JsonProperty("model_code")
-    @Nullable
     String modelCode;
 
     @ApiModelProperty(value = "Код комплектации от производителя")

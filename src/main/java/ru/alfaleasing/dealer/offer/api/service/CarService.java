@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.alfaleasing.dealer.offer.api.constant.LoadingType;
 import ru.alfaleasing.dealer.offer.api.dto.StockDTO;
 import ru.alfaleasing.dealer.offer.api.entity.Connection;
 import ru.alfaleasing.dealer.offer.api.entity.Task;
@@ -28,10 +29,10 @@ import static ru.alfaleasing.dealer.offer.api.constant.AppsConstant.JSON;
 @Slf4j
 public class CarService {
 
-    public static final String CONNECTION = "Connection";
-    public static final String LOADING_TYPE = "LoadingType";
-    public static final String DEALER = "Dealer";
-    public static final String SALON_ID = "salonId";
+    public static final String CONNECTION_NAME = "Connection";
+    public static final String LOADING_TYPE_NAME = "LoadingType";
+    public static final String DEALER_NAME = "Dealer";
+    public static final String SALON_ID_NAME = "salonId";
 
     private final QueueProcessor queueProcessor;
     private final MinIOService minIOService;
@@ -51,22 +52,23 @@ public class CarService {
     public UUID loadStocksToMinioAndRabbit(List<StockDTO> stock, String methodType, UUID salonId, String clientId) {
         log.info("methodType = {} salonId = {}  clientId = {}", methodType, salonId, clientId);
         LocalDateTime now = LocalDateTime.now();
+        LoadingType taskLoadingType = LoadingType.valueOf(methodType);
+        return dealerRepository.findDealerByUid(salonId)
+                .map(dealer -> {
+                    Connection currentConnection = connectionRepository.getConnectionsByDealer(dealer.getUid()).stream()
+                            .filter(connection -> taskLoadingType == connection.getType())
+                            .findFirst()
+                            .orElseThrow(() -> new EntityNotFoundException(CONNECTION_NAME, LOADING_TYPE_NAME, methodType));
 
-        return dealerRepository.getDealerByUid(salonId)
-            .map(dealer -> {
-                Connection currentConnection = connectionRepository.getConnectionsByDealer(dealer.getUid()).stream()
-                    .filter(conn -> methodType.equalsIgnoreCase(conn.getType().toString()))
-                    .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException(CONNECTION, LOADING_TYPE, methodType));
+                    Task savedTask = taskRepository.save(taskMapper.getTask(stock, clientId, now, dealer, currentConnection, UUID.randomUUID()));
+                    currentConnection.setLastTaskDate(now);
+                    connectionRepository.save(currentConnection);
 
-                Task savedTask = taskRepository.save(taskMapper.getTask(stock, clientId, now, dealer, currentConnection, UUID.randomUUID()));
-                currentConnection.setLastTaskDate(now);
-                connectionRepository.save(currentConnection);
+                    minIOService.writeFileToMinIO(stock, savedTask.getUid() + JSON);
+                    queueProcessor.publishMessage(taskMapper.getTaskDTO(dealer, savedTask));
+                    return savedTask.getUid();
 
-                minIOService.writeFileToMinIO(stock, savedTask.getUid() + JSON);
-                queueProcessor.publishMessage(taskMapper.getTaskDTO(dealer, savedTask));
-                return savedTask.getUid();
-
-            }).orElseThrow(() -> new EntityNotFoundException(DEALER, SALON_ID, salonId));
+                })
+                .orElseThrow(() -> new EntityNotFoundException(DEALER_NAME, SALON_ID_NAME, salonId));
     }
 }

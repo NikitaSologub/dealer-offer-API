@@ -15,5 +15,5 @@ public interface DealerRepository extends JpaRepository<Dealer, Long> {
     @EntityGraph(value = "dealer-entity-graph", type = EntityGraph.EntityGraphType.FETCH)
     List<Dealer> findAllWithConnections();
 
-    Optional<Dealer> getDealerByUid(UUID uid);
+    Optional<Dealer> findDealerByUid(UUID uid);
 }

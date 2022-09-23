@@ -1,7 +1,5 @@
 package ru.alfaleasing.dealer.offer.api.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +23,5 @@ public class MinIOConfig {
             .endpoint(url)
             .credentials(accessKey, secretKey)
             .build();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper().registerModule(new JavaTimeModule());
     }
 }

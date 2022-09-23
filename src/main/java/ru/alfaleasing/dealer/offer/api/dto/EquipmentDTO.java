@@ -19,7 +19,6 @@ public class EquipmentDTO {
 
     @ApiModelProperty(value = "Стоимость дополнительного оборудования")
     @JsonProperty("price")
-    @Nullable
     String price;
 
     @ApiModelProperty(value = "Количество единиц дополнительного оборудования")
